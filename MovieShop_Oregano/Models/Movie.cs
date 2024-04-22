@@ -15,7 +15,6 @@ namespace MovieShop_Oregano.Models
         public string Director { get; set; }
 
         [Required]
-        [DataType(DataType.DateTime)]
         public int ReleaseYear { get; set; }
 
         [Required]
