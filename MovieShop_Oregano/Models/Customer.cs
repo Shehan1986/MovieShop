@@ -33,18 +33,18 @@ namespace MovieShop_Oregano.Models
 
         [Required]
         [StringLength(100)]
-        [Display(Name = "Dilivary Adress")]
-        public string DilivaryAdress { get; set; }
+        [Display(Name = "Delivery Adress")]
+        public string DeliveryAdress { get; set; }
 
         [Required]
         [StringLength(100)]
-        [Display(Name = "Dilivary City")]
-        public string DilivaryCitys { get; set; }
+        [Display(Name = "Delivery City")]
+        public string DeliveryCity { get; set; }
 
         [Required]
         [StringLength(10)]
         [Display(Name = "Postal Code")]
-        public string DilivaryZip { get; set; }
+        public string DeliveryZip { get; set; }
 
         [Required]
         [StringLength(20)]
