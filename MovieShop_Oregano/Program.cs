@@ -19,7 +19,8 @@ namespace MovieShop_Oregano
                 options =>
              options.UseSqlServer(connectionString)
                 );
-
+            builder.Services.AddSession();
+            builder.Services.AddHttpContextAccessor();
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -34,7 +35,7 @@ namespace MovieShop_Oregano
             app.UseStaticFiles();
 
             app.UseRouting();
-
+            app.UseSession();
             app.UseAuthorization();
 
             app.MapControllerRoute(
