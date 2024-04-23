@@ -40,32 +40,10 @@ namespace MovieShop_Oregano.Services
             var topFiveMovieByCheapest = _db.Movies.OrderBy(m => m.Price).Take(5).ToList();
             return topFiveMovieByCheapest;
         }
-        public List<Movie> MostPopularMovies()
+        public Movie MostPopularMovie()
         {
-
-            
-           
-            
-            
-            
-            
-            /*var topMostPopularMovies = _db.Movies.Join(_db.OrderRows,
-                movie => movie.Id, orderrows => orderrows.MovieId
-                , (movie, orderrows) => new { movie, orderrows })
-                .Join(_db.Orders
-                , numberOfOrders => numberOfOrders.orderrows.OrderId, order => order.Id,
-                (numberOfOrders, order) => new { numberOfOrders, order})
-                .Select(popularmovie => new
-                {
-                    MovieId = popularmovie.numberOfOrders.movie.Id,
-                    OrderId = popularmovie.order.Id
-                }).Count(orderrows => orderrows.MovieId);*/
-                
-            
-            
-            
-            
-            return topMostPopularMovies;
+            var topMostPopularMovie = _db.Movies.OrderByDescending(m => m.OrderRows.Count).FirstOrDefault();                                                                          
+            return topMostPopularMovie;
         }
 
         public void AddMovie(Movie movie)

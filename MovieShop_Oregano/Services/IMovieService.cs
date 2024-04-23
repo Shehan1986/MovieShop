@@ -11,7 +11,7 @@ namespace MovieShop_Oregano.Services
         List<Movie> TopFiveNewestMovies();
         List<Movie> TopFiveOldestMovies();
         List<Movie> TopFiveCheapestMovies();
-        List<Movie> MostPopularMovies();
+        Movie MostPopularMovie();
 
         void AddMovie(Movie movie);
     }
