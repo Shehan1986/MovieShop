@@ -42,8 +42,17 @@ namespace MovieShop_Oregano.Services
         }
         public Movie MostPopularMovie()
         {
-            var topMostPopularMovie = _db.Movies.OrderByDescending(m => m.OrderRows.Count).FirstOrDefault();                                                                          
-            return topMostPopularMovie;
+            var mostPopularMovie = _db.Movies.OrderByDescending(m => m.OrderRows.Count).FirstOrDefault();                                                                          
+            return mostPopularMovie;
+        }
+
+        public Customer MostExpensiveOrder()
+        {
+            var mostExpensiveOrder = _db.Customers.OrderByDescending(customer => customer.Orders
+                .SelectMany(order => order.OrderRows)
+                .Sum(orderRow => orderRow.Price)).FirstOrDefault();
+
+			return mostExpensiveOrder;
         }
 
         public void AddMovie(Movie movie)
