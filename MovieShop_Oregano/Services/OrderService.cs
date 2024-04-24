@@ -1,4 +1,4 @@
-﻿namespace MovieShop_Oregano.Services.Order
+﻿namespace MovieShop_Oregano.Services
 {
     public class OrderService
     {
