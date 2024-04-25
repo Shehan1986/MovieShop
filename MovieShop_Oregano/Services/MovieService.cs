@@ -1,4 +1,4 @@
-﻿namespace MovieShop_Oregano.Services.Movie
+﻿namespace MovieShop_Oregano.Services
 {
     public class MovieService
     {

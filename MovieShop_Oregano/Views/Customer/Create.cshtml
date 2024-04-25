@@ -1,0 +1,194 @@
+﻿@model MovieShop_Oregano.Models.Customer
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+ <div class="container py-3 min-vh-100 d-flex flex-column justify-content-center align-items-center">
+        <div class="col-md-12 card shadow rounded-3 my-auto d-flex flex-row">
+            <div class="card-header p-3 d-flex flex-column justify-content-between">
+                <h2>Create Customer</h2>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-8">
+                        <form asp-action="Create">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-floating mb-3">
+                                        <input asp-for="FirstName" class="form-control" id="idFristName" placeholder="First Name">
+                                        <label asp-for="FirstName" class="control-label" for="idFristName">First Name</label>
+                                        <span asp-validation-for="FirstName" class="text-danger"></span>
+                                    </div>
+                                    <div class="form-floating mb-3">
+                                        <input asp-for="LastName" class="form-control" id="idLastName" placeholder="Last Name">
+                                        <label asp-for="LastName" class="control-label" for="idLastName">Last Name</label>
+                                        <span asp-validation-for="LastName" class="text-danger"></span>
+                                    </div>
+                                    <div class="form-floating mb-3">
+                                        <input asp-for="BillingAddress" class="form-control" id="idBillingAddress" placeholder="Billing Address">
+                                        <label asp-for="BillingAddress" class="control-label" for="idBillingAddress">Billing Address</label>
+                                        <span asp-validation-for="BillingAddress" class="text-danger"></span>
+                                    </div>
+                                    <div class="form-floating mb-3">
+                                        <input asp-for="BillingCitys" class="form-control" id="idBillingCitys" placeholder="Billing City">
+                                        <label asp-for="BillingCitys" class="control-label" for="idBillingCitys">Billing City</label>
+                                        <span asp-validation-for="BillingCitys" class="text-danger"></span>
+                                    </div>
+                                    <div class="form-floating mb-3">
+                                        <input asp-for="BillingZip" class="form-control" id="idBillingZip" placeholder="Billing Zip">
+                                        <label asp-for="BillingZip" class="control-label" for="idBillingZip">Billing Zip</label>
+                                        <span asp-validation-for="BillingZip" class="text-danger"></span>
+                                    </div>
+                                <div class="form-group mb-3">
+                                        <input class="form-check-input" type="checkbox" value="" id="cbSameAddress" style="padding: 10px 10px;">
+                                        <label class="form-check-label" >Same delivery address</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    
+                                    <div class="form-floating mb-3">
+                                        <input asp-for="DeliveryAdress" class="form-control" id="idDeliveryAdress" placeholder="Delivery Address">
+                                        <label asp-for="DeliveryAdress" class="control-label" for="idDeliveryAdress">Delivery Address</label>
+                                        <span asp-validation-for="DeliveryAdress" class="text-danger"></span>
+                                    </div>
+                                    <div class="form-floating mb-3">
+                                        <input asp-for="DeliveryCity" class="form-control" id="idDeliveryCity" placeholder="Delivery City">
+                                        <label asp-for="DeliveryCity" class="control-label" for="idDeliveryCity">Delivery City</label>
+                                        <span asp-validation-for="DeliveryCity" class="text-danger"></span>
+                                    </div>
+                                    <div class="form-floating mb-3">
+                                        <input asp-for="DeliveryZip" class="form-control" id="idDeliveryZip" placeholder="Delivery Zip">
+                                        <label asp-for="DeliveryZip" class="control-label" for="idDeliveryZip">Delivery Zip</label>
+                                        <span asp-validation-for="DeliveryZip" class="text-danger"></span>
+                                    </div>
+                                    <div class="form-floating mb-3">
+                                        <input asp-for="PhoneNumber" class="form-control" id="idPhone" placeholder="Phone Number">
+                                        <label asp-for="PhoneNumber" class="control-label" for="idPhone">Phone Number</label>
+                                        <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                                    </div>
+                                    <div class="form-floating mb-3">
+                                        <input asp-for="Email" class="form-control" id="idEmail" placeholder="Email">
+                                        <label asp-for="Email" class="control-label" for="idEmail">Email</label>
+                                        <span asp-validation-for="Email" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group" style="padding: 10px 10px;">
+                                <input type="submit" value="Save and Continue" class="btn btn-success" id="idSubmitButton" style="display:none;">
+                                <button class="btn btn-success" type="button" disabled id="idLodingButton" style="display:block;">
+                                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                    Loading...
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+@* <div>
+    <a asp-area="" asp-controller="" asp-action="" class="btn btn-success btn-block">Continue Shopping</a>
+</div> *@
+
+<script src="\lib\jquery\dist\jquery.js"></script>
+<script>
+    //# sourceURL=Customer.js
+    let customerEmail = getCookie("custemail");
+    //alert(customerEmail);
+    $.ajax({
+        type: "POST",
+        url: '@Url.Action("GetCustomerByEmail", "Customer")',
+        data: { email: customerEmail }, 
+        dataType: "json",
+        success: function (result) {
+            if (result != null) {
+                //console.log(JSON.stringify(result));
+                
+                //var result = JSON.parse(JSON.stringify(result))
+               // console.log(jsonArray);
+
+                const jsonString = JSON.stringify(Object.assign({}, result))
+                //console.log(jsonString);
+                const json_obj = JSON.parse(jsonString);
+                //console.log(json_obj);
+
+                //const billingAddress = json_obj['firstName'];
+               // console.log(billingAddress);
+                var idSubmitButton = document.getElementById("idSubmitButton");
+                var idLodingButton = document.getElementById("idLodingButton");
+                idLodingButton.style.display = "none";
+                idSubmitButton.style.display = "block";
+
+                let idBillingAddress = document.getElementById("idBillingAddress");
+                idBillingAddress.value = json_obj['billingAddress'];
+
+                let idBillingCity = document.getElementById("idBillingCitys");
+                idBillingCity.value = json_obj['billingCitys'];
+
+                document.getElementById("idBillingZip").value = json_obj['billingZip'];
+
+                document.getElementById("idDeliveryAdress").value = json_obj['deliveryAdress'];
+                document.getElementById("idDeliveryCity").value = json_obj['deliveryCity'];
+                document.getElementById("idDeliveryZip").value = json_obj['deliveryZip'];
+
+                document.getElementById("idFristName").value = json_obj['firstName'];
+                document.getElementById("idLastName").value = json_obj['lastName'];
+                document.getElementById("idEmail").value = json_obj['email'];
+                document.getElementById("idPhone").value = json_obj['phoneNumber'];
+            } else {
+                document.getElementById("idFristName").focus();
+                var idSubmitButton = document.getElementById("idSubmitButton");
+                var idLodingButton = document.getElementById("idLodingButton");
+                idLodingButton.style.display = "none";
+                idSubmitButton.style.display = "block";
+                //alert("Customer not found.");
+            }
+        },
+        error: function (x, e) {
+            // Handle error
+            alert("Error occurred while fetching customer data.");
+        }
+    });
+
+    function getCookie(cname) {
+        let name = cname + "=";
+        let decodedCookie = decodeURIComponent(document.cookie);
+        let ca = decodedCookie.split(';');
+        for (let i = 0; i < ca.length; i++) {
+            let c = ca[i];
+            while (c.charAt(0) == ' ') {
+                c = c.substring(1);
+            }
+            if (c.indexOf(name) == 0) {
+                return c.substring(name.length, c.length);
+            }
+        }
+        return "";
+    }
+
+   document.addEventListener("DOMContentLoaded", function () {
+         let checkbox = document.getElementById("cbSameAddress");
+         checkbox.addEventListener("change", function () {
+             let billingAddress = document.getElementById("idBillingAddress").value;
+             let billingCity = document.getElementById("idBillingCitys").value;
+             let billingZip = document.getElementById("idBillingZip").value;
+
+             if (checkbox.checked) {
+                 document.getElementById("idDeliveryAdress").value = billingAddress;
+                 document.getElementById("idDeliveryCity").value = billingCity;
+                 document.getElementById("idDeliveryZip").value = billingZip;
+                 document.getElementById("idPhone").focus();
+             } else {
+                 document.getElementById("idDeliveryAdress").value = "";
+                 document.getElementById("idDeliveryCity").value = "";
+                 document.getElementById("idDeliveryZip").value = "";
+             }
+         });
+     });
+</script>
+

@@ -33,7 +33,7 @@ namespace MovieShop_Oregano.Models
 
         [Required]
         [StringLength(100)]
-        [Display(Name = "Delivery Adress")]
+        [Display(Name = "Delivery Address")]
         public string DeliveryAdress { get; set; }
 
         [Required]

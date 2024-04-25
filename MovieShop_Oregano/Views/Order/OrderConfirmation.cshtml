@@ -1,0 +1,81 @@
+﻿@model IEnumerable<MovieShop_Oregano.Models.Movie>
+@{
+    ViewData["Title"] = "OrderConfirmation";
+}
+    <div class="container mt-5">
+        <div class="card">
+            <div class="card-body">
+                <h2 class="card-title text-success mb-4">Order Confirmation</h2>
+                <div class="row">
+                    <div class="col-md-9">
+                        <div class="card">
+                            <div class="card-body">
+                            <table class="table" style="border:solid 1; border-block-color:green">
+                                    <thead>
+                                        <tr>
+                                        <th scope="col" style="color:green">Movie</th>
+                                        <th scope="col" style="color:green">Title</th>
+                                        <th scope="col" style="color:green">Director</th>
+                                        <th scope="col" style="color:green">Price</th>
+                                        <th scope="col" style="width:15px;color:green">Quantity</th>
+                                        <th scope="col" style="color:green">Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!-- product -->
+                                        @foreach (var item in Model)
+                                        {
+                                            <tr>
+                                                <td><img src="@item.MovieImg" alt="Product Image" class="product-img"></td>
+                                                <td>@item.Title</td>
+                                                <td>@item.Director</td>
+                                                <td>$@item.Price</td>
+                                                    <td style="width:15px">
+                                                    <input type="number" class="form-control" value="1" min="1" disabled>
+                                                </td>
+                                                <td>$10.99</td>
+                                            </tr>
+                                        }
+                                        <!-- product end -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title text-success">Order Summary</h5>
+                                <p class="card-text text-success">Subtotal: $10.99</p>
+                                <p class="card-text text-success">Shipping: Free</p>
+                                <p class="card-text text-success">Total: $10.99</p>
+                                <p class="card-text text-success">Delivery Address: John Doe, 123 Main St, Anytown, USA</p>
+                                <p class="card-text text-success">Estimated Delivery Date: January 1, 2025</p>
+                            <a href="#" class="btn btn-success btn-block" data-bs-toggle="modal" data-bs-target="#thankYouModal">Confirm Order</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<!-- Thank You Modal -->
+<div class="modal fade" id="thankYouModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Thank You!</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Your order has been confirmed. Thank you for shopping with us!</p>
+            </div>
+            <div class="modal-footer">
+                <a class="btn btn-success" asp-area="" asp-controller="Home" asp-action="Index">Close</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
