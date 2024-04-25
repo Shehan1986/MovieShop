@@ -1,4 +1,4 @@
-﻿using MovieShop_Oregano.Data;
+using MovieShop_Oregano.Data;
 using MovieShop_Oregano.Models;
 
 namespace MovieShop_Oregano.Services
@@ -39,6 +39,5 @@ namespace MovieShop_Oregano.Services
             _db.Customers.Update(customer);
             _db.SaveChanges();
         }
-
     }
 }

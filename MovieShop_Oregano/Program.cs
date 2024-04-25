@@ -23,9 +23,13 @@ namespace MovieShop_Oregano
             builder.Services.AddSession();
             builder.Services.AddHttpContextAccessor();
 
-            builder.Services.AddScoped<ICustomerService, CustomerService>();
 
-            var app = builder.Build();
+            builder.Services.AddScoped<ICustomerService, CustomerService>();
+           
+			      builder.Services.AddScoped<IMovieService, MovieService>();
+
+			      var app = builder.Build();
+
 
            
             // Configure the HTTP request pipeline.
