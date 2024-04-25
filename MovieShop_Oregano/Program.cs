@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using MovieShop_Oregano.Data;
+using MovieShop_Oregano.Services;
 
 namespace MovieShop_Oregano
 {
@@ -21,7 +22,10 @@ namespace MovieShop_Oregano
                 );
             builder.Services.AddSession();
             builder.Services.AddHttpContextAccessor();
-            var app = builder.Build();
+
+			builder.Services.AddScoped<IMovieService, MovieService>();
+
+			var app = builder.Build();
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
