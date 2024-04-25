@@ -64,9 +64,29 @@
                     <p class="card-text font-color">Subtotal: $10.99</p>
                     <p class="card-text font-color">Shipping: Free</p>
                     <p class="card-text font-color">Total: $10.99</p>
-                    <a href="#" class="btn btn-success btn-block">Checkout</a>
+                    <label for="exampleInputEmail1" style="color:green">Enter your email address:</label>
+                    <input type="email" class="form-control" id="idCustomerEmail" placeholder="Enter email" >
+                    <a class="btn btn-success btn-block" onclick="fnCheckout()" style="margin: 10px 10px;">Checkout</a>
                 </div>
             </div>
         </div>
     </div>
 </div>
+<script>
+    // asp - area="" asp - controller="Customer" asp - action="Create"
+    function fnCheckout() {
+        let emailAddress = document.getElementById("idCustomerEmail").value;
+        //if (confirm("Do you want to checkout?"))
+
+        setCookie("custemail", emailAddress, 1);
+        
+       window.location.href = '@Url.Content("~/Customer/Create")';
+        
+    }
+    function setCookie(cname, cvalue, exdays) {
+        const d = new Date();
+        d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+        let expires = "expires=" + d.toUTCString();
+        document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+    }
+</script>
