@@ -61,6 +61,11 @@ namespace MovieShop_Oregano.Services
             _db.SaveChanges();
         }
 
+        public void UpdateMovie(Movie movie)
+        {
+            _db.Update(movie);
+            _db.SaveChanges();
+        }
 
     }
 }

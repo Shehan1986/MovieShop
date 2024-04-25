@@ -14,5 +14,7 @@ namespace MovieShop_Oregano.Services
         Movie MostPopularMovie();
         Customer MostExpensiveOrder();
         void AddMovie(Movie movie);
+
+        void UpdateMovie(Movie movie);
     }
 }
