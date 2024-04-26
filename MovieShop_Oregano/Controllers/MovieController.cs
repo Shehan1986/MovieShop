@@ -39,13 +39,11 @@ namespace MovieShop_Oregano.Controllers
 
 		public IActionResult Edit(int id)
 		{
-			if (ModelState.IsValid) 
-			{
-				_movieService.GetMovieById(id);
-				return RedirectToAction("Index");
-			}
 			
-			return View();
+			var movie =	_movieService.GetMovieById(id);
+			
+			
+			return View(movie);
 		}
 
 		[HttpPost]
