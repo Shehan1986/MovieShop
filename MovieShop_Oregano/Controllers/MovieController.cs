@@ -16,7 +16,8 @@ namespace MovieShop_Oregano.Controllers
 
 		public IActionResult Index()
         {
-            return View();
+			var movie = _movieService.GetMovies();
+			return View(movie);
         }
 
 		public IActionResult Create()
