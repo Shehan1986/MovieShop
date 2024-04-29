@@ -75,14 +75,25 @@ namespace MovieShop_Oregano.Controllers
 		}
 
 		[HttpPost]
-		public IActionResult Delete()
+		public IActionResult Delete(Movie movie)
 		{
-			return View();
+			if (!ModelState.IsValid)
+			{
+				_movieService.DeleteMovie(movie);
+				return RedirectToAction("Index");
+			}
+			
+			return View(movie);
 		}
 
-		public IActionResult Details()
+		public IActionResult Details(int id)
 		{
-			return View();
+			 var movie = _movieService.GetMovieById(id);
+			return View(movie);
 		}
+
+		
+
+
 	}
 }

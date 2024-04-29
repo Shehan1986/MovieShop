@@ -16,5 +16,8 @@ namespace MovieShop_Oregano.Services
         void AddMovie(Movie movie);
 
         void UpdateMovie(Movie movie);
-    }
+        void DeleteMovie(Movie movie);
+       /* Movie MovieDetails(int id);*/
+
+	}
 }

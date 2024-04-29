@@ -67,5 +67,17 @@ namespace MovieShop_Oregano.Services
             _db.SaveChanges();
         }
 
+        public void DeleteMovie(Movie movie)
+        {
+            _db.Remove(movie);
+            _db.SaveChanges();
+        }
+
+        /*public Movie MovieDetails(int id)
+        {
+            var movieId = _db.Movies.FirstOrDefault(m => m.Id == id);
+            return movieId;
+        }*/
+
     }
 }
