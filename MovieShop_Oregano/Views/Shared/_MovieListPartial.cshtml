@@ -1,0 +1,69 @@
+﻿@model IEnumerable<MovieShop_Oregano.Models.Movie>
+<div class="container">
+    <div class="row">
+        @foreach (var item in Model)
+        {
+            <div class="col-md-3" style="padding:10px 10px">
+                <div class="card border-0 rounded-0 shadow">
+                    <img src="~/img/@item.MovieImg" width="15%" class="card-img-top" alt="Movie 1" onclick="fnGoToDetails()"style="cursor:pointer"  />
+                    <div class="card-body my-3">
+                        <div class="row">
+                            <div class="col-12">
+                                <h5 class="card-title">@item.Title</h5>
+                                <p class="card-text">Directed by: @item.Director</p>
+                                <p class="card-text">Release Year: @item.ReleaseYear</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row align-items-center text-center g-0">
+                        <div class="col-7">
+                            <h6 class="">$@item.Price</h6>
+                        </div>
+                        <div class="col-5" style="margin-bottom:2px;">
+                            <button class="btn btn-success">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cart-plus" viewBox="0 0 16 16">
+                                    <path d="M9 5.5a.5.5 0 0 0-1 0V7H6.5a.5.5 0 0 0 0 1H8v1.5a.5.5 0 0 0 1 0V8h1.5a.5.5 0 0 0 0-1H9z" />
+                                    <path d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1zm3.915 10L3.102 4h10.796l-1.313 7zM6 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0m7 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+</div>
+
+
+<script>
+    function fnGoToDetails() {
+        //let emailAddress = document.getElementById("idCustomerEmail").value;
+        
+        //setCookie("custemail", emailAddress, 1);
+
+        window.location.href = '@Url.Content("~/Home/Index")';
+
+    }
+    document.addEventListener('DOMContentLoaded', function () {
+        const searchInput = document.getElementById('searchInput');
+        const searchButton = document.getElementById('searchButton');
+        const movieList = document.getElementById('movieList');
+
+        searchButton.addEventListener('click', function () {
+            const searchTerm = searchInput.value.toLowerCase();
+            const rows = movieList.querySelectorAll('tr');
+
+            rows.forEach(row => {
+                const title = row.cells[1].textContent.toLowerCase();
+                if (title.includes(searchTerm)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+    });
+</script>
+
+
