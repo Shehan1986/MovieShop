@@ -47,10 +47,13 @@
                         </li>
                         
                         @{
-                            var isAuthenticated = ViewBag.IsAuthenticated ?? false; 
-                        }
+                            
+                            var isAuthenticatedString = Context.Session.GetString("IsAuthenticated");
+                            var isAuthenticated = !string.IsNullOrEmpty(isAuthenticatedString) && isAuthenticatedString == "true";
+
+                        } 
                         
-                        @if(isAuthenticated)
+                        @if (isAuthenticated)
                         {
                         <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Customers</a>

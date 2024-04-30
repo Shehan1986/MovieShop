@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using MovieShop_Oregano.Helpers;
 
 namespace MovieShop_Oregano.Controllers
 {
@@ -18,8 +19,8 @@ namespace MovieShop_Oregano.Controllers
         {
             if (password == "Oregano")
             {
-                HttpContext.Session.SetString("IsAuthenticated", "true");
-                return RedirectToAction("Index", "Home");
+                HttpContext.Session.Set("IsAuthenticated", true);
+				return RedirectToAction("Index", "Home");
             }
             else
             {
@@ -30,7 +31,7 @@ namespace MovieShop_Oregano.Controllers
 
         public IActionResult LogOut()
         {
-            HttpContext.Session.Clear();
+            HttpContext.Session.Remove("IsAuthenticated");
             return RedirectToAction("Index", "Home");
         }
 

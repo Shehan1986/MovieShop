@@ -63,7 +63,8 @@ namespace MovieShop_Oregano.Controllers
 
 		public IActionResult Create()
 		{
-			return View();
+            ViewBag.IsAuthenticated = HttpContext.Session.GetString("IsAuthenticated") == "true";
+            return View();
 		}
 
 		[HttpPost]
