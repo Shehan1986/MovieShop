@@ -5,6 +5,13 @@
 
 }
 
+@if (!isAuthenticated)
+{
+    <li class="nav-item">
+        <a class="nav-link text-white" asp-area="" asp-controller="Movie" asp-action="List">Movie Shop</a>
+    </li>
+}
+
 @if (isAuthenticated)
 {
     <li class="nav-item dropdown">
