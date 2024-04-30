@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using MovieShop_Oregano.Helpers;
 using MovieShop_Oregano.Models;
 using System.Diagnostics;
 
@@ -17,7 +16,10 @@ namespace MovieShop_Oregano.Controllers
         public IActionResult Index()
         {
 
-            ViewBag.IsAuthenticated = HttpContext.Session.GetString("IsAuthenticated") == "true";
+			/*var isAuthenticatedString = HttpContext.Session.GetString("IsAuthenticated");
+			var isAuthenticated = !string.IsNullOrEmpty(isAuthenticatedString) && isAuthenticatedString == "true";
+
+			return View(isAuthenticated);*/
             return View();
         }
 
