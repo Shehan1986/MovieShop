@@ -48,41 +48,7 @@
                         <li class="nav-item">
                             <a class="nav-link text-white" asp-area="" asp-controller="Movie" asp-action="List">Movie Shop</a>
                         </li>
-
-                        @{
-
-                            var isAuthenticatedString = Context.Session.GetString("IsAuthenticated");
-                            var isAuthenticated = !string.IsNullOrEmpty(isAuthenticatedString) && isAuthenticatedString == "true";
-
-                        }
-
-                        @if (isAuthenticated)
-                        {
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Customers</a>
-                                <ul class="dropdown-menu dropdown-menu-dark" style="--bs-dropdown-bg: green;">
-                                    <a class="dropdown-item text-white" asp-area="" asp-controller="Customer" asp-action="Index">Index</a>
-                                    <a class="dropdown-item text-white" asp-area="" asp-controller="Customer" asp-action="Create">Create</a>
-                                </ul>
-                            </li>
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Movies</a>
-                                <ul class="dropdown-menu dropdown-menu-dark" style="--bs-dropdown-bg: green;">
-                                    <a class="dropdown-item text-white" asp-area="" asp-controller="Movie" asp-action="Index">Index</a>
-                                    <a class="dropdown-item text-white" asp-area="" asp-controller="Movie" asp-action="Create">Create</a>
-                                </ul>
-                            </li>
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Orders</a>
-                                <ul class="dropdown-menu dropdown-menu-dark" style="--bs-dropdown-bg: green;">
-                                    <a class="dropdown-item text-white" asp-area="" asp-controller="Order" asp-action="Index">Index</a>
-                                    <a class="dropdown-item text-white" asp-area="" asp-controller="Order" asp-action="Create">Create</a>
-                                </ul>
-                            </li>
-                        }
-                        @* <a class="nav-link text-white" asp-area="" asp-controller="Movie" asp-action="Index">Movies</a>
-                        <a class="nav-link text-white" asp-area="" asp-controller="Order" asp-action="Index">Orders</a> *@
-
+                        <partial name="_HiddenNavigationLinksPartial" />
                     </ul>
                 </div>
                 <div>
@@ -91,21 +57,7 @@
                             <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5M3.102 4l1.313 7h8.17l1.313-7zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4m7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4m-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2m7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2" />
                         </svg>
                     </a>
-                    @* <a class="btn btn-primary" asp-area="" asp-controller="Home" asp-action="Admin">
-                    <i class="bi bi-person-circle"></i>
-                    </a> *@
-                    @if (isAuthenticated)
-                    {
-                        <a class="btn btn-danger" asp-area="" asp-controller="Admin" asp-action="LogOut">
-                            <i class="bi bi-box-arrow-in-right"></i>
-                        </a>
-                    }
-                    else
-                    {
-                        <a class="btn btn-primary" asp-area="" asp-controller="Admin" asp-action="Login">
-                            <i class="bi bi-person-circle"></i>
-                        </a>
-                    }
+                    <partial name="_AdminButtonsPartial" />
                 </div>
             </div>
         </nav>
