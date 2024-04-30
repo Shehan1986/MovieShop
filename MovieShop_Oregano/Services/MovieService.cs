@@ -60,5 +60,19 @@ namespace MovieShop_Oregano.Services
             _db.Movies.Add(movie);
             _db.SaveChanges();
         }
+        public void UpdateMovie(Movie movie)
+        {
+            _db.Update(movie);
+            _db.SaveChanges();
+        }
+
+        public void DeleteMovie(Movie movie)
+        {
+            _db.Remove(movie);
+            _db.SaveChanges();
+        }
+
+
+
     }
 }

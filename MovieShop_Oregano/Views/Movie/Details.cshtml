@@ -1,0 +1,54 @@
+﻿@model MovieShop_Oregano.Models.Movie
+
+
+@{
+	ViewData["Title"] = "Movie Details";
+}
+
+<style>
+    .vh-84 {
+        height: 84vh !important;
+    }
+</style> 
+
+
+<div class="row justify-content-center">
+    <div class="col-md-8 vh-84 d-flex align-items-center">
+        <div class="card mb-12 my-auto">
+            <div class="row g-0">
+                <div class="col-md-12">
+                    <div class="card-header text-white bg-info">
+                        <p class="card-text">
+                            <h5 class="card-title">
+                                 @Model.Title
+                                <a class="text-white float-end" asp-action="Edit" asp-route-id="@Model.Id"><i class="bi bi-pencil-square"></i></a>
+                            </h5>
+                        </p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <img src="~/img/@Model.MovieImg" width="100%" alt="">
+                </div>
+                <div class="col-md-8">
+                    <div class="card-body">
+                        <p class="card-text"><b>Directed by: </b>
+                            @Model.Director</p>
+                        <p class="card-text">
+                            <b>Price: </b>
+                            @Model.Price
+                        </p>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="card-footer">
+                        <p class="card-text">
+                            <a class="btn btn-outline-primary float-right" asp-action="Index">
+                                Back to List
+                            </a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

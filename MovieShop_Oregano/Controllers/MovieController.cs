@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using MovieShop_Oregano.Data;
 using MovieShop_Oregano.Models;
 using MovieShop_Oregano.Models.ViewModel;
 using MovieShop_Oregano.Services;
@@ -56,7 +57,8 @@ namespace MovieShop_Oregano.Controllers
 
 		public IActionResult Index()
         {
-            return View();
+			var movie = _movieService.GetMovies();
+			return View(movie);
         }
 
 		public IActionResult Create()
@@ -76,23 +78,60 @@ namespace MovieShop_Oregano.Controllers
 			return View(movie);
 		}
 
-		public IActionResult Edit()
+		public IActionResult Edit(int id)
 		{
 			
+			var movie =	_movieService.GetMovieById(id);
 			
-			return View();
+			
+			return View(movie);
 		}
 
-		public IActionResult Delete()
+		[HttpPost]
+		public IActionResult Edit(int id, Movie movie)
 		{
-			return View();
+
+			/*if (id ! == movie.Id)
+			{
+				return NotFound();
+			}*/
+
+			
+			if (ModelState.IsValid)
+			{
+				_movieService.UpdateMovie(movie);
+				return RedirectToAction("Index");
+			}
+
+			return View(movie);
 		}
 
-		public IActionResult Details()
+		public IActionResult Delete(int id)
 		{
-			return View();
+
+			var movie = _movieService.GetMovieById(id);
+			
+
+			return View(movie);
 		}
 
+		[HttpPost]
+		public IActionResult Delete(Movie movie)
+		{
+			if (!ModelState.IsValid)
+			{
+				_movieService.DeleteMovie(movie);
+				return RedirectToAction("Index");
+			}
+			
+			return View(movie);
+		}
+
+		public IActionResult Details(int id)
+		{
+			 var movie = _movieService.GetMovieById(id);
+			return View(movie);
+		}
         public IActionResult List()
         {
             MovieVM model = new MovieVM();

@@ -22,7 +22,7 @@ namespace MovieShop_Oregano.Models
         public decimal Price { get; set; }
 
         
-        [DataType(DataType.Text)]
+        [DataType(DataType.ImageUrl)]
         public string MovieImg { get; set; }
 
         public virtual ICollection<OrderRow> OrderRows { get; set; } = new List<OrderRow>();
