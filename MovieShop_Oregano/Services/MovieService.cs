@@ -85,7 +85,7 @@ namespace MovieShop_Oregano.Services
                     var response = await httpClient.GetAsync(imageUrl);
                     if (response.IsSuccessStatusCode)
                     {
-                        var fileName = $"{movieTitle.Replace(" ", "-")}.jpg";
+                        var fileName = $"{movieTitle}.jpg";
                         var savePath = Path.Combine(_webHostEnvironment.WebRootPath, "img", fileName);
                         using (var stream = await response.Content.ReadAsStreamAsync())
                         {
@@ -106,7 +106,8 @@ namespace MovieShop_Oregano.Services
             catch (Exception ex)
             {
                 Console.WriteLine($"Error downloading image from {imageUrl}: {ex.Message}");
-                return null;
+                
+                return $"Error downloading image: {ex.Message}";
             }
         }
 

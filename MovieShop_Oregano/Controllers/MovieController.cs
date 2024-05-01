@@ -55,46 +55,7 @@ namespace MovieShop_Oregano.Controllers
 		{
 			_movieService = movieService;
 		}
-       /* private string FetchAndSaveImage(string imageUrl, string movieTitle)
-        {
-			try
-			{
-				string fileName = $"{movieTitle.Replace(" ", "_").Replace("/", "_")}.jpg";
-				string imagePath = Path.Combine("wwwroot", "img", fileName);
-
-				using (Client webClient = new WebClient())
-				{
-					webClient.DownloadFile(new Uri(imageUrl), imagePath);
-				}
-
-				return Path.Combine("img", fileName);
-
-            }
-			catch (Exception ex)
-			{
-				Console.WriteLine($"Error fetching and saving image: {ex.Message}");
-				return null;
-			}
-        }
-
-        private void DeleteImage(string imagePath)
-        {
-			try
-			{
-				string fullPath = Path.Combine("wwwroot", imagePath);
-                if (File.Exists(fullPath))
-                {
-                    
-                    File.Delete(fullPath);
-                }
-
-            }
-			catch (Exception ex)
-			{
-				Console.WriteLine($"Error deleting imamge: {ex.Message}");
-			}
-        }*/
-
+      
         public IActionResult Index()
         {
 			var movie = _movieService.GetMovies();
@@ -113,15 +74,7 @@ namespace MovieShop_Oregano.Controllers
 		{
 			if (ModelState.IsValid)
 			{
-				if (!string.IsNullOrEmpty(movie.MovieImg))
-				{
-					var imageUrl = movie.MovieImg;
-					var fileName = await _movieService.SaveImageFromUrl(movie.MovieImg, movie.Title);
-					if (!string.IsNullOrEmpty(fileName))
-					{
-						movie.MovieImg = fileName;
-					}
-				}
+				movie.MovieImg = await _movieService.SaveImageFromUrl(movie.MovieImg, movie.Title);
 								
 				_movieService.AddMovie(movie);
 				return RedirectToAction("Index");
@@ -138,20 +91,17 @@ namespace MovieShop_Oregano.Controllers
 
 		[HttpPost]
 		public async Task<IActionResult> Edit(int id, Movie movie)
-		{	
+		{
+
+			if (id != movie.Id)
+			{
+				return NotFound();
+			}
+			
 			if (ModelState.IsValid)
 			{
-				if (!string.IsNullOrEmpty(movie.MovieImg))
-				{
-					var imageUrl = movie.MovieImg;
-					var fileName = await _movieService.SaveImageFromUrl(movie.MovieImg, movie.Title);
-					if (!string.IsNullOrEmpty(fileName))
-					{
-						_movieService.DeleteImage(movie.MovieImg);
-						movie.MovieImg = fileName;
-					}
-				}					
-				
+				movie.MovieImg = await _movieService.SaveImageFromUrl(movie.MovieImg, movie.Title);
+
 				_movieService.UpdateMovie(movie);
 				return RedirectToAction("Index");
 			}
@@ -168,12 +118,11 @@ namespace MovieShop_Oregano.Controllers
 		[HttpPost, ActionName("Delete")]
 		public IActionResult DeleteConfirmed(Movie movie)
 		{
-			var movieToDelete = _movieService.GetMovieById(movie.Id);
 
-			if (movieToDelete != null)
+			if (ModelState.IsValid)
 			{
-				_movieService.DeleteMovie(movieToDelete);
-				_movieService.DeleteImage(movieToDelete.MovieImg);
+				_movieService.DeleteMovie(movie);
+				_movieService.DeleteImage(movie.MovieImg);
 				return RedirectToAction("Index");
 			}
 
