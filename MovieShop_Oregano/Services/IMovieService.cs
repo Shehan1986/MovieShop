@@ -17,7 +17,12 @@ namespace MovieShop_Oregano.Services
 
         void UpdateMovie(Movie movie);
         void DeleteMovie(Movie movie);
-       /* Movie MovieDetails(int id);*/
+        /* Movie MovieDetails(int id);*/
+        Task<string> SaveImageFromUrl(string imageUrl, string movieTitle);
+        void DeleteImage(string fileName);
+
+
+
 
 	}
 }

@@ -4,6 +4,7 @@ using MovieShop_Oregano.Models;
 using MovieShop_Oregano.Models.ViewModel;
 using MovieShop_Oregano.Services;
 using Newtonsoft.Json;
+using System.Net;
 
 namespace MovieShop_Oregano.Controllers
 {
@@ -54,24 +55,74 @@ namespace MovieShop_Oregano.Controllers
 		{
 			_movieService = movieService;
 		}
+       /* private string FetchAndSaveImage(string imageUrl, string movieTitle)
+        {
+			try
+			{
+				string fileName = $"{movieTitle.Replace(" ", "_").Replace("/", "_")}.jpg";
+				string imagePath = Path.Combine("wwwroot", "img", fileName);
 
-		public IActionResult Index()
+				using (Client webClient = new WebClient())
+				{
+					webClient.DownloadFile(new Uri(imageUrl), imagePath);
+				}
+
+				return Path.Combine("img", fileName);
+
+            }
+			catch (Exception ex)
+			{
+				Console.WriteLine($"Error fetching and saving image: {ex.Message}");
+				return null;
+			}
+        }
+
+        private void DeleteImage(string imagePath)
+        {
+			try
+			{
+				string fullPath = Path.Combine("wwwroot", imagePath);
+                if (File.Exists(fullPath))
+                {
+                    
+                    File.Delete(fullPath);
+                }
+
+            }
+			catch (Exception ex)
+			{
+				Console.WriteLine($"Error deleting imamge: {ex.Message}");
+			}
+        }*/
+
+        public IActionResult Index()
         {
 			var movie = _movieService.GetMovies();
-			return View(movie);
+    
+            return View(movie);
         }
 
 		public IActionResult Create()
 		{
-            ViewBag.IsAuthenticated = HttpContext.Session.GetString("IsAuthenticated") == "true";
+            
             return View();
 		}
 
 		[HttpPost]
-		public IActionResult Create(Movie movie)
+		public async Task<IActionResult> Create(Movie movie)
 		{
 			if (ModelState.IsValid)
 			{
+				if (!string.IsNullOrEmpty(movie.MovieImg))
+				{
+					var imageUrl = movie.MovieImg;
+					var fileName = await _movieService.SaveImageFromUrl(movie.MovieImg, movie.Title);
+					if (!string.IsNullOrEmpty(fileName))
+					{
+						movie.MovieImg = fileName;
+					}
+				}
+								
 				_movieService.AddMovie(movie);
 				return RedirectToAction("Index");
 			}
@@ -79,52 +130,53 @@ namespace MovieShop_Oregano.Controllers
 			return View(movie);
 		}
 
-		public IActionResult Edit(int id)
-		{
-			
+        public IActionResult Edit(int id)
+		{			
 			var movie =	_movieService.GetMovieById(id);
-			
-			
 			return View(movie);
 		}
 
 		[HttpPost]
-		public IActionResult Edit(int id, Movie movie)
-		{
-
-			/*if (id ! == movie.Id)
-			{
-				return NotFound();
-			}*/
-
-			
+		public async Task<IActionResult> Edit(int id, Movie movie)
+		{	
 			if (ModelState.IsValid)
 			{
+				if (!string.IsNullOrEmpty(movie.MovieImg))
+				{
+					var imageUrl = movie.MovieImg;
+					var fileName = await _movieService.SaveImageFromUrl(movie.MovieImg, movie.Title);
+					if (!string.IsNullOrEmpty(fileName))
+					{
+						_movieService.DeleteImage(movie.MovieImg);
+						movie.MovieImg = fileName;
+					}
+				}					
+				
 				_movieService.UpdateMovie(movie);
 				return RedirectToAction("Index");
 			}
 
 			return View(movie);
 		}
-
-		public IActionResult Delete(int id)
+		
+        public IActionResult Delete(int id)
 		{
-
 			var movie = _movieService.GetMovieById(id);
-			
-
 			return View(movie);
 		}
 
-		[HttpPost]
-		public IActionResult Delete(Movie movie)
+		[HttpPost, ActionName("Delete")]
+		public IActionResult DeleteConfirmed(Movie movie)
 		{
-			if (!ModelState.IsValid)
+			var movieToDelete = _movieService.GetMovieById(movie.Id);
+
+			if (movieToDelete != null)
 			{
-				_movieService.DeleteMovie(movie);
+				_movieService.DeleteMovie(movieToDelete);
+				_movieService.DeleteImage(movieToDelete.MovieImg);
 				return RedirectToAction("Index");
 			}
-			
+
 			return View(movie);
 		}
 

@@ -1,5 +1,7 @@
+using Azure;
 using MovieShop_Oregano.Data;
 using MovieShop_Oregano.Models;
+using System.Net;
 
 namespace MovieShop_Oregano.Services
 {
@@ -7,11 +9,13 @@ namespace MovieShop_Oregano.Services
     {
         private readonly MovieDbContext _db;
         private readonly IConfiguration _configuration;
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public MovieService(MovieDbContext db, IConfiguration configuration)
+        public MovieService(MovieDbContext db, IConfiguration configuration, IWebHostEnvironment webHostEnvironment)
         {
             _db = db;
             _configuration = configuration;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         public List<Movie> GetMovies()
@@ -72,7 +76,48 @@ namespace MovieShop_Oregano.Services
             _db.SaveChanges();
         }
 
+        public async Task<string> SaveImageFromUrl(string imageUrl, string movieTitle)
+        {
+            try
+            {
+                using (var httpClient = new HttpClient())
+                {
+                    var response = await httpClient.GetAsync(imageUrl);
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var fileName = $"{movieTitle.Replace(" ", "-")}.jpg";
+                        var savePath = Path.Combine(_webHostEnvironment.WebRootPath, "img", fileName);
+                        using (var stream = await response.Content.ReadAsStreamAsync())
+                        {
+                            using (var fileStream = new FileStream(savePath, FileMode.Create))
+                            {
+                                await stream.CopyToAsync(fileStream);
+                            }
+                        }
+                        return fileName;
+                    }
+                    else
+                    {
+                        
+                        throw new Exception($"Failed to download image from {imageUrl}. Status code: {response.StatusCode}");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error downloading image from {imageUrl}: {ex.Message}");
+                return null;
+            }
+        }
 
+        public void DeleteImage(string fileName)
+        {
+            var filePath = Path.Combine(_webHostEnvironment.WebRootPath, "img", fileName);
+            if (File.Exists(filePath))
+            {
+                File.Delete(filePath);
+            }
+        }
 
     }
 }
