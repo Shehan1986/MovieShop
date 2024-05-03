@@ -35,6 +35,14 @@ body {
     background-color: #336b2b;
 }
 
+.footer-movie-collection {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    white-space: nowrap;
+    line-height: 60px;
+}
+
 @media (max-width: 576px) {
     .btn-container .btn {
         flex-basis:100%;
