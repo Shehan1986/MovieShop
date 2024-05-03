@@ -30,6 +30,11 @@ body {
     flex-grow: 1; 
 }
 
+.bg-dark-green {
+    --bs-bg-opacity: 1;
+    background-color: #336b2b;
+}
+
 @media (max-width: 576px) {
     .btn-container .btn {
         flex-basis:100%;
