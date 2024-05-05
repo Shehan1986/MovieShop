@@ -2,6 +2,7 @@ using Azure;
 using MovieShop_Oregano.Data;
 using MovieShop_Oregano.Models;
 using System.Net;
+using System.Text;
 
 namespace MovieShop_Oregano.Services
 {
@@ -76,42 +77,56 @@ namespace MovieShop_Oregano.Services
             _db.SaveChanges();
         }
 
-        public async Task<string> SaveImageFromUrl(string imageUrl, string movieTitle)
-        {
-            try
-            {
-                using (var httpClient = new HttpClient())
-                {
-                    var response = await httpClient.GetAsync(imageUrl);
-                    if (response.IsSuccessStatusCode)
-                    {
-                        var fileName = $"{movieTitle}.jpg";
-                        var savePath = Path.Combine(_webHostEnvironment.WebRootPath, "img", fileName);
-                        using (var stream = await response.Content.ReadAsStreamAsync())
-                        {
-                            using (var fileStream = new FileStream(savePath, FileMode.Create))
-                            {
-                                await stream.CopyToAsync(fileStream);
-                            }
-                        }
-                        return fileName;
-                    }
-                    else
-                    {
-                        
-                        throw new Exception($"Failed to download image from {imageUrl}. Status code: {response.StatusCode}");
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error downloading image from {imageUrl}: {ex.Message}");
-                
-                return $"Error downloading image: {ex.Message}";
-            }
-        }
+		public async Task<string> SaveImageFromUrl(string imageUrl, string movieTitle)
+		{
+			try
+			{
+				var invalidChars = Path.GetInvalidFileNameChars();
+				var sanitizedTitle = new StringBuilder();
 
-        public void DeleteImage(string fileName)
+				foreach (var character in movieTitle)
+				{
+					if (!invalidChars.Contains(character) && character != ':')
+					{
+						sanitizedTitle.Append(character);
+					}
+					else if (character == ' ' || character == '-')
+					{
+						sanitizedTitle.Append(character);
+					}
+				}
+
+				using (var httpClient = new HttpClient())
+				{
+					var response = await httpClient.GetAsync(imageUrl);                   
+					if (response.IsSuccessStatusCode)
+					{
+						var fileName = $"{sanitizedTitle}.jpg"; // Use the sanitized movie title for the file name
+						var savePath = Path.Combine(_webHostEnvironment.WebRootPath, "img", fileName);
+						using (var stream = await response.Content.ReadAsStreamAsync())
+						{
+							using (var fileStream = new FileStream(savePath, FileMode.Create))
+							{
+								await stream.CopyToAsync(fileStream);
+							}
+						}
+						return fileName;
+					}
+					else
+					{
+						throw new Exception($"Failed to download image from {imageUrl}. Status code: {response.StatusCode}");
+					}
+				}
+			}
+			catch (Exception ex)
+			{
+				Console.WriteLine($"Error downloading image from {imageUrl}: {ex.Message}");
+
+				return $"Error downloading image: {ex.Message}";
+			}
+		}
+
+		public void DeleteImage(string fileName)
         {
             var filePath = Path.Combine(_webHostEnvironment.WebRootPath, "img", fileName);
             if (File.Exists(filePath))

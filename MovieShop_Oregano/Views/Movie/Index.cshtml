@@ -1,8 +1,18 @@
 ﻿@model IEnumerable<MovieShop_Oregano.Models.Movie>
 
 @{
-    ViewData["Title"] = "Index";
-    Layout = "~/Views/Shared/_MovieCollectionLayout.cshtml";
+	ViewData["Title"] = "Index";
+	Layout = "~/Views/Shared/_MovieCollectionLayout.cshtml";
+
+	Pager pager = new Pager();
+	int pageNo = 0;
+
+	if (ViewBag.Pager != null)
+	{
+		pager = ViewBag.Pager;
+		pageNo = pager.CurrentPage;
+	}
+
 }
 
 <h1>All Created Movies</h1>
@@ -10,11 +20,12 @@
 <p>
     <a asp-action="Create" class="btn btn-success">Create New</a>
 </p>
+
 	<div class="row row-cols-2 row-cols-md-3 row-cols-sm-2 row-cols-lg-4 row-cols-xl-6"> @* row-cols-xl-5 *@
 		@foreach (var item in Model)
 		{
-			<div class="col">
-				<div class="card mb-3">
+			<div class="col mb-3">
+				<div class="card h-100">
 					@* /* max-width: 540px or 350px; */ *@
 					<div class="row g-0">
 						<div class="col-md-12">
@@ -54,5 +65,5 @@
 			</div>
 		}
 	</div>
-
+	<partial name="_PagerPartial" model="@pager" /> 
 

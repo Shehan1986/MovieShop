@@ -56,11 +56,21 @@ namespace MovieShop_Oregano.Controllers
 			_movieService = movieService;
 		}
       
-        public IActionResult Index()
+        public IActionResult Index(int pg=1)
         {
 			var movie = _movieService.GetMovies();
-    
-            return View(movie);
+
+			const int pageSize = 24;
+			if (pg < 1)
+				pg = 1;
+
+			int recCount = movie.Count();
+			var pager = new Pager(recCount, pg, pageSize);
+			int recSkip = (pg - 1) * pageSize;
+			var data = movie.Skip(recSkip).Take(pager.PageSize).ToList();
+			this.ViewBag.Pager = pager;
+
+			return View(data);
         }
 
 		public IActionResult Create()
