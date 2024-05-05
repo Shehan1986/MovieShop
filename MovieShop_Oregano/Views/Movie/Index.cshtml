@@ -21,7 +21,7 @@
     <a asp-action="Create" class="btn btn-success">Create New</a>
 </p>
 
-	<div class="row row-cols-2 row-cols-md-3 row-cols-sm-2 row-cols-lg-4 row-cols-xl-6"> @* row-cols-xl-5 *@
+	<div class="row row-cols-2 row-cols-md-3 row-cols-sm-2 row-cols-lg-4 row-cols-xl-6 row-equal-height"> @* row-cols-xl-5 *@
 		@foreach (var item in Model)
 		{
 			<div class="col mb-3">
@@ -65,5 +65,37 @@
 			</div>
 		}
 	</div>
-	<partial name="_PagerPartial" model="@pager" /> 
+	<partial name="_PagerPartial" model="@pager" />
 
+
+
+<script>
+	
+	function setEqualHeight() {
+		
+		var rows = document.querySelectorAll('.row-equal-height');
+		rows.forEach(function (row) {
+			var headers = row.querySelectorAll('.card-header');
+			var bodies = row.querySelectorAll('.card-body');
+
+			var maxHeightHeader = 0;
+			var maxHeightBody = 0;
+			headers.forEach(function (header) {
+				maxHeightHeader = Math.max(maxHeightHeader, header.offsetHeight);
+			});
+			bodies.forEach(function (body) {
+				maxHeightBody = Math.max(maxHeightBody, body.offsetHeight);
+			});
+
+			headers.forEach(function (header) {
+				header.style.height = maxHeightHeader + 'px';
+			});
+			bodies.forEach(function (body) {
+				body.style.height = maxHeightBody + 'px';
+			});
+		});
+	}
+
+	window.addEventListener('load', setEqualHeight);
+	window.addEventListener('resize', setEqualHeight);
+</script>
