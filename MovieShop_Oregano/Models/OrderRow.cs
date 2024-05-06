@@ -9,7 +9,8 @@ namespace MovieShop_Oregano.Models
         public int MovieId { get; set; }
         [Required]
         [DataType(DataType.Currency)]
-        public int Price { get; set; }
+        public decimal Price { get; set; }
+        public int Qty { get; set; }
         public virtual Order Order { get; set; }
         public virtual Movie Movie { get; set; }
     }

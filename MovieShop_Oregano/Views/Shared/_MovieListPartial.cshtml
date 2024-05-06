@@ -16,11 +16,14 @@
                         </div>
                     </div>
                     <div class="row align-items-center text-center g-0">
-                        <div class="col-7">
+                        <div class="col-6">
                             <h6 class="">$@item.Price</h6>
                         </div>
-                        <div class="col-5" style="margin-bottom:2px;">
-                            <button class="btn btn-success">
+                        <div class="col-3" >
+                            <input type="number" id='@item.Id' class="form-control" value="1" min="1" style="margin-bottom:10px;">
+                        </div>
+                        <div class="col-3">
+                            <button class="btn btn-success" onclick="fnAddToSession(@item.Id)" style="margin-bottom:10px;" >
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cart-plus" viewBox="0 0 16 16">
                                     <path d="M9 5.5a.5.5 0 0 0-1 0V7H6.5a.5.5 0 0 0 0 1H8v1.5a.5.5 0 0 0 1 0V8h1.5a.5.5 0 0 0 0-1H9z" />
                                     <path d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1zm3.915 10L3.102 4h10.796l-1.313 7zM6 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0m7 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0" />
@@ -35,8 +38,28 @@
 
 </div>
 
-
+<div class="modal" tabindex="-1" id="idGoToShopping">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-body">
+                <h5>successfully added to cart!</h5>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-warning" onclick="fnHideModel()">Continue Shopping</button>
+                <button type="button" class="btn btn-success" onclick="fnGoToShoppingCart()">Go to Shopping Cart</button>
+            </div>
+        </div>
+    </div>
+</div>
 <script>
+    function fnHideModel() {
+        $('#idGoToShopping').hide();
+
+    }
+    function fnGoToShoppingCart() {
+        window.location.href = '@Url.Content("~/ShoppingCart/Index")';
+
+    }
     function fnGoToDetails() {
         //let emailAddress = document.getElementById("idCustomerEmail").value;
         
@@ -45,24 +68,80 @@
         window.location.href = '@Url.Content("~/Home/Index")';
 
     }
-    document.addEventListener('DOMContentLoaded', function () {
-        const searchInput = document.getElementById('searchInput');
-        const searchButton = document.getElementById('searchButton');
-        const movieList = document.getElementById('movieList');
-
-        searchButton.addEventListener('click', function () {
-            const searchTerm = searchInput.value.toLowerCase();
-            const rows = movieList.querySelectorAll('tr');
-
-            rows.forEach(row => {
-                const title = row.cells[1].textContent.toLowerCase();
-                if (title.includes(searchTerm)) {
-                    row.style.display = '';
-                } else {
-                    row.style.display = 'none';
-                }
-            });
+    function fnAddToSession(id) {
+        //alert(id);
+        let qtyCount = document.getElementById(id).value;
+        // updateCartItemCount(qtyCount);
+        $.ajax({
+            url: '@Url.Action("AddToCart", "ShoppingCart")', // Endpoint URL
+            type: 'POST',
+            data: { id: id, qtyCount: qtyCount }, // Data to be sent to the server
+            success: function (response) {
+                $('#idGoToShopping').show();
+                $.ajax({
+                    url: '@Url.Action("UpdateItemCount", "ShoppingCart")', // Endpoint URL
+                    type: 'POST',
+                    data: { itemCount: qtyCount }, // Data to be sent to the server
+                    success: function (response) {
+                        //alert("UpdateItemCount");
+                        getCartItemCount();
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Error updating item count');
+                    }
+                });
+            },
+            error: function (xhr, status, error) {
+                console.error('Error updating item count');
+            }
         });
+    }
+    
+    function getCartItemCount() {
+        $.ajax({
+            url: '@Url.Action("GetCartItemCount", "ShoppingCart")', // Endpoint URL
+            type: 'POST',
+            //data: { itemCount: count }, // Data to be sent to the server
+            success: function (response) {
+           // alert("GetCartItemCount");
+                const jsonString = JSON.stringify(Object.assign({}, response))
+                const json_obj = JSON.parse(jsonString);
+                var element = document.getElementById("cart-item-count");
+                //alert(json_obj['itemCount']);
+                element.textContent = json_obj['itemCount'];
+            },
+            error: function (xhr, status, error) {
+                console.error('Error updating item count');
+            }
+        });
+
+        //alert(extCount);
+    }
+    
+
+    // Example: Update the cart item count
+    // Replace this with your actual logic to fetch the item count
+    //var itemCount = 5; // Example: Replace this with your actual item count
+    //updateCartItemCount(itemCount);
+
+    document.addEventListener('DOMContentLoaded', function () {
+        // const searchInput = document.getElementById('searchInput');
+        // const searchButton = document.getElementById('searchButton');
+        // const movieList = document.getElementById('movieList');
+
+        // searchButton.addEventListener('click', function () {
+        //     const searchTerm = searchInput.value.toLowerCase();
+        //     const rows = movieList.querySelectorAll('tr');
+
+        //     rows.forEach(row => {
+        //         const title = row.cells[1].textContent.toLowerCase();
+        //         if (title.includes(searchTerm)) {
+        //             row.style.display = '';
+        //         } else {
+        //             row.style.display = 'none';
+        //         }
+        //     });
+        // });
     });
 </script>
 

@@ -27,6 +27,8 @@
                 background-color: #e0e0e0; /* Change background color on hover */
             }
     </style>
+   
+    
 </head>
 <body>
     <header style="background-color:green">
@@ -50,6 +52,7 @@
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cart" viewBox="0 0 16 16">
                         <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5M3.102 4l1.313 7h8.17l1.313-7zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4m7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4m-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2m7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2" />
                     </svg>
+                        <span id="cart-item-count" class="badge bg-primary"></span>
                     </a>
                     <partial name="_AdminButtonsPartial" />
                 </div>
@@ -64,12 +67,35 @@
 
     <footer class="border-top footer text-muted" style="background-color:green">
         <div class="container">
-            <span style="background-color:white">&copy; 2024 - MovieShop_Oregano -</span> <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            <span style="">&copy; 2024 - MovieShop_Oregano -</span> <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
+    <script>
+        updateCartItemCount();
+
+        function updateCartItemCount() {
+            $.ajax({
+                url: '@Url.Action("GetCartItemCount", "ShoppingCart")', // Endpoint URL
+                type: 'POST',
+                //data: { itemCount: count }, // Data to be sent to the server
+                success: function (response) {
+                    const jsonString = JSON.stringify(Object.assign({}, response))
+                   const json_obj = JSON.parse(jsonString);
+                    var element = document.getElementById("cart-item-count");
+                    //alert(json_obj['itemCount']);
+                    element.textContent = json_obj['itemCount'];
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error updating item count');
+                }
+            });
+            
+            //alert(extCount);
+        }
+    </script>
 </body>
 </html>

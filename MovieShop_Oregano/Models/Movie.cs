@@ -27,11 +27,13 @@ namespace MovieShop_Oregano.Models
 
         public virtual ICollection<OrderRow> OrderRows { get; set; } = new List<OrderRow>();
 
+        public int Qty { get; set; }
+
         public Movie()
         {
 
         }
-        public Movie(int id, string title, string director, int releaseYear, decimal price, string movieImg)
+        public Movie(int id, string title, string director, int releaseYear, decimal price, string movieImg, int qty)
         {
             Id = id;
             Title = title;
@@ -39,6 +41,7 @@ namespace MovieShop_Oregano.Models
             ReleaseYear = releaseYear;
             Price = price;
             MovieImg = movieImg;
+            Qty = qty;
         }
 
     }
