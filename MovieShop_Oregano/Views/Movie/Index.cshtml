@@ -1,8 +1,18 @@
 ﻿@model IEnumerable<MovieShop_Oregano.Models.Movie>
 
 @{
-    ViewData["Title"] = "Index";
-    Layout = "~/Views/Shared/_MovieCollectionLayout.cshtml";
+	ViewData["Title"] = "Index";
+	Layout = "~/Views/Shared/_MovieCollectionLayout.cshtml";
+
+	Pager pager = new Pager();
+	int pageNo = 0;
+
+	if (ViewBag.Pager != null)
+	{
+		pager = ViewBag.Pager;
+		pageNo = pager.CurrentPage;
+	}
+
 }
 
 <h1>All Created Movies</h1>
@@ -10,204 +20,16 @@
 <p>
     <a asp-action="Create" class="btn btn-success">Create New</a>
 </p>
-@* <table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Title)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Director)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ReleaseYear)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Price)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.MovieImg)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Director)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ReleaseYear)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Price)
-            </td>
-            <td>
-                <img src="img/@Html.DisplayFor(modelItem => item.MovieImg)" />
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
 
-<div class="row row-cols-1 row-cols-md-3 g-4">
-    <div class="col">
-            <div class="card h-100">
-			<div class="row">
-                <div class="col-4">
-                    <img src="~/img/Interstellar.jpg" class="img-fluid" style="width:30%;" alt="...">
-                </div>
-				<div class="card-body">
-					<h5 class="card-title">Card title</h5>
-					<p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-				</div>
-			</div>
-        </div>
-    </div>
-
-    <div class="col">
-        <div class="card mb-3">
-            <div class="row g-0">
-                <div class="col-md-3">
-                    <img src="/img/Interstellar.jpg" class="img-fluid rounded-start" alt="...">
-                </div>
-                <div class="col-md-7">
-                    <div class="card-body">
-                        <h5 class="card-title">The Shawshank Redemption</h5>
-                        <p class="card-title">Directed by: Quentin Tarantino</p>
-                        <p class="card-title">Release Year: 2020</p>
-                        <p class="card-title">Price: $49.99</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-
-    <div class="col">
-        <div class="card h-100">
-            <img src="..." class="card-img-top" alt="...">
-            <div class="card-body">
-                <h5 class="card-title">Card title</h5>
-                <p class="card-text">This is a short card.</p>
-            </div>
-        </div>
-    </div>
-    <div class="col">
-        <div class="card h-100">
-            <img src="..." class="card-img-top" alt="...">
-            <div class="card-body">
-                <h5 class="card-title">Card title</h5>
-                <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content.</p>
-            </div>
-        </div>
-    </div>
-    <div class="col">
-        <div class="card h-100">
-            <img src="..." class="card-img-top" alt="...">
-            <div class="card-body">
-                <h5 class="card-title">Card title</h5>
-                <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="card mb-3" style="max-width: 540px;">
-    <div class="row g-0">
-        <div class="col-md-3">
-            <img src="/img/Interstellar.jpg" class="img-fluid rounded-start" alt="...">
-        </div>
-        <div class="col-md-7">
-            <div class="card-body">
-                <h5 class="card-title">The Shawshank Redemption</h5>
-                <p class="card-title">Directed by: Quentin Tarantino</p>
-                <p class="card-title">Release Year: 2020</p>
-                <p class="card-title">Price: $49.99</p>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="container-fluid my-5">
-<div class="row row-cols-8 g-4">
-    <div class="col">
-        <div class="card h-100">
-            <img src="/img/Interstellar.jpg" class="card-img-top" alt="...">
-            <div class="card-body">
-                <h5 class="card-title">Card title</h5>
-                <p class="card-title">Directed By: Director</p>
-                <p class="card-title">Release Date: 2020</p>
-                <p class="card-title">Price: $49.99</p>
-					<div class="row">
-						<div class="d-flex justify-content-around p-0">
-							<a class="col-3 btn btn-secondary">Button</a>
-							<a class="col-3 btn btn-info">Button</a>
-							<a class="col-3 btn btn-danger">Button</a>
-						</div>
-					</div>
-            </div>
-        </div>
-    </div>
-    <div class="col">
-        <div class="card h-100">
-            <img src="/img/Interstellar.jpg" class="card-img-top" alt="...">
-            <div class="card-body">
-                <h5 class="card-title">Card title</h5>
-                <p class="card-text">This is a short card.</p>
-            </div>
-        </div>
-    </div>
-    <div class="col">
-        <div class="card h-100">
-            <img src="/img/Interstellar.jpg" class="card-img-top" alt="...">
-            <div class="card-body">
-                <h5 class="card-title">Card title</h5>
-                <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content.</p>
-            </div>
-        </div>
-    </div>
-    <div class="col">
-        <div class="card h-100">
-            <img src="/img/Interstellar.jpg" class="card-img-top" alt="...">
-            <div class="card-body">
-                <h5 class="card-title">Card title</h5>
-                <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-            </div>
-        </div>
-    </div>
-    <div class="col">
-        <div class="card h-100">
-            <img src="/img/Interstellar.jpg" class="card-img-top" alt="...">
-            <div class="card-body">
-                <h5 class="card-title">Card title</h5>
-                <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-            </div>
-        </div>
-    </div>
-</div>
-</div> *@
-
-
-	<div class="row row-cols-2 row-cols-md-4 row-cols-xxl-5">
+	<div class="row row-cols-2 row-cols-md-3 row-cols-sm-2 row-cols-lg-4 row-cols-xl-6 row-equal-height"> @* row-cols-xl-5 *@
 		@foreach (var item in Model)
 		{
-			<div class="col-6 col-xl-3 col-xxl-2 mb-3">
-				<div class="card mb-3" style="max-width: 407px;">
+			<div class="col mb-3">
+				<div class="card h-100">
 					@* /* max-width: 540px or 350px; */ *@
 					<div class="row g-0">
 						<div class="col-md-12">
-							<div class="card-header text-warning bg-dark">
+							<div class="card-header text-white bg-dark-green">
 								<p class="card-text">
 									<h5 class="card-title d-flex justify-content-between">
 										@item.Title
@@ -216,10 +38,10 @@
 								</p>
 							</div>
 						</div>
-						<div class="col-md-6">
+						<div class="col-md-12">
                         <img src="~/img/@item.MovieImg" width="100%" alt="@item.Title">
 						</div>
-						<div class="col-md-6">
+						<div class="col-md-12">
 							<div class="card-body">
 								<p class="card-text"><b>Directed by: </b>@item.Director</p>
 								<p class="card-text"><b>Release Date: </b>@item.ReleaseYear</p>
@@ -228,14 +50,14 @@
 						</div>
 						<div class="col-md-12">
 							<div class="card-footer ">
-								<p class="card-text d-flex justify-content-between">
-									<a class="btn btn-outline-primary float-end" asp-action="Details" asp-route-id="@item.Id">
+                            <div class="btn-container d-flex justify-content-between flex-wrap d-grid gap-3 mt-2 mb-2"> @* mt-2 mb-2 *@
+                                <a class="btn btn-outline-primary" asp-action="Details" asp-route-id="@item.Id">
 										<i class="bi bi-eye-fill"></i> Show Details
 									</a>
-									<a class="btn btn-outline-danger" asp-controller="Movie" asp-action="Delete" asp-route-id="@item.Id">
+                                <a class="btn btn-outline-danger" asp-controller="Movie" asp-action="Delete" asp-route-id="@item.Id">
 										<span class="bi bi-cart-plus"></span> Delete
 									</a>
-								</p>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -243,5 +65,37 @@
 			</div>
 		}
 	</div>
+	<partial name="_PagerPartial" model="@pager" />
 
 
+
+<script>
+	
+	function setEqualHeight() {
+		
+		var rows = document.querySelectorAll('.row-equal-height');
+		rows.forEach(function (row) {
+			var headers = row.querySelectorAll('.card-header');
+			var bodies = row.querySelectorAll('.card-body');
+
+			var maxHeightHeader = 0;
+			var maxHeightBody = 0;
+			headers.forEach(function (header) {
+				maxHeightHeader = Math.max(maxHeightHeader, header.offsetHeight);
+			});
+			bodies.forEach(function (body) {
+				maxHeightBody = Math.max(maxHeightBody, body.offsetHeight);
+			});
+
+			headers.forEach(function (header) {
+				header.style.height = maxHeightHeader + 'px';
+			});
+			bodies.forEach(function (body) {
+				body.style.height = maxHeightBody + 'px';
+			});
+		});
+	}
+
+	window.addEventListener('load', setEqualHeight);
+	window.addEventListener('resize', setEqualHeight);
+</script>

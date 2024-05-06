@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using MovieShop_Oregano.Models;
+using MovieShop_Oregano.Models.ViewModel;
+using MovieShop_Oregano.Services;
 using System.Diagnostics;
 
 namespace MovieShop_Oregano.Controllers
@@ -7,50 +9,28 @@ namespace MovieShop_Oregano.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
+		private readonly IMovieService _movieService;
+		public HomeController(ILogger<HomeController> logger, IMovieService movieService)
         {
             _logger = logger;
+            _movieService = movieService;
         }
 
         public IActionResult Index()
         {
 
-			/*var isAuthenticatedString = HttpContext.Session.GetString("IsAuthenticated");
-			var isAuthenticated = !string.IsNullOrEmpty(isAuthenticatedString) && isAuthenticatedString == "true";
-
-			return View(isAuthenticated);*/
-            return View();
-        }
-
-       /*
-        public IActionResult Admin()
-        {
-
-			return View();
-
-        }
-
-        [HttpPost]
-        public IActionResult Admin(string password)
-        {
-            if (password == "Oregano")
+            FrontDashboardVM frontPage = new FrontDashboardVM()
             {
-                HttpContext.Session.SetString("IsAuthenticated", "true");
-                return RedirectToAction("Index");
-            }
-            else
-            {
-                ModelState.AddModelError("Password", "Incorrect password");
-                return View();
-            }
-        }
+                NewestMovies = _movieService.TopFiveNewestMovies(),
+                OldestMovies = _movieService.TopFiveOldestMovies(),
+                CheapestMovies = _movieService.TopFiveCheapestMovies(),
+                MostPopularMovie = _movieService.MostPopularMovie(),
+                MostExpensiveOrder = _movieService.MostExpensiveOrder()
+            };
+            
 
-        public IActionResult LogOut()
-        {
-            HttpContext.Session.Clear();
-            return RedirectToAction("Index", "Home");            
-        }*/
+            return View(frontPage);
+        }
 
         public IActionResult Privacy()
         {
