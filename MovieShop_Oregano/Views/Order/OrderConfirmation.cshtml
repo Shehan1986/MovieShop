@@ -10,7 +10,7 @@
                     <div class="col-md-9">
                         <div class="card">
                             <div class="card-body">
-                            <table class="table" style="border:solid 1; border-block-color:green">
+                            <table class="table" id="idShoppingCart" style="border:solid 1; border-block-color:green">
                                     <thead>
                                         <tr>
                                         <th scope="col" style="color:green">Movie</th>
@@ -19,6 +19,7 @@
                                         <th scope="col" style="color:green">Price</th>
                                         <th scope="col" style="width:15px;color:green">Quantity</th>
                                         <th scope="col" style="color:green">Total</th>
+                                        <th></th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -26,14 +27,16 @@
                                         @foreach (var item in Model)
                                         {
                                             <tr>
-                                                <td><img src="@item.MovieImg" alt="Product Image" class="product-img"></td>
+                                            <td><img src="~/img/@item.MovieImg" alt="Product Image" class="product-img" style="width:40%"></td>
                                                 <td>@item.Title</td>
                                                 <td>@item.Director</td>
                                                 <td>$@item.Price</td>
                                                     <td style="width:15px">
-                                                    <input type="number" class="form-control" value="1" min="1" disabled>
+                                                <input type="number" class="form-control" value="@item.Qty" min="1" disabled>
                                                 </td>
-                                                <td>$10.99</td>
+                                            <td>$@(item.Price * item.Qty)</td>
+                                            <td style="display:none;visibility: hidden">@(item.Price * item.Qty)</td>
+                                            <td></td>
                                             </tr>
                                         }
                                         <!-- product end -->
@@ -46,11 +49,11 @@
                         <div class="card">
                             <div class="card-body">
                                 <h5 class="card-title text-success">Order Summary</h5>
-                                <p class="card-text text-success">Subtotal: $10.99</p>
+                                <p class="card-text font-color" id="idSubtotal"></p>
                                 <p class="card-text text-success">Shipping: Free</p>
-                                <p class="card-text text-success">Total: $10.99</p>
-                                <p class="card-text text-success">Delivery Address: John Doe, 123 Main St, Anytown, USA</p>
-                                <p class="card-text text-success">Estimated Delivery Date: January 1, 2025</p>
+                                <p class="card-text font-color" id="idTotal"></p>
+                            <p class="card-text text-success">Delivery Address: @ViewBag.CustomerAddress</p>
+                            <p class="card-text text-success" id="dtmDate"></p>
                             <a href="#" class="btn btn-success btn-block" data-bs-toggle="modal" data-bs-target="#thankYouModal">Confirm Order</a>
                             </div>
                         </div>
@@ -66,16 +69,112 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Thank You!</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                @* <button type="button" class="btn-close close-btn" data-bs-dismiss="modal" aria-label="Close"></button> *@
             </div>
             <div class="modal-body">
-                <p>Your order has been confirmed. Thank you for shopping with us!</p>
+                <h4>Your order has been confirmed. Thank you for shopping with us!</h4>
             </div>
             <div class="modal-footer">
-                <a class="btn btn-success" asp-area="" asp-controller="Home" asp-action="Index">Close</a>
+                <a class="btn btn-success close-btn" onclick="fnSessionClear()" asp-area="" >Close</a>
             </div>
         </div>
     </div>
 </div>
+<script>
+    // var elements = document.getElementsByClassName("close-btn");
 
+    // // Loop through each element with class "close-btn"
+    // for (var i = 0; i < elements.length; i++) {
+    //     elements[i].addEventListener("click", fnSessionClear);
+    // }
+    //@@index.html
+    function fnSessionClear() {
+      
+        $.ajax({
+            url: '@Url.Action("SessionClear", "Order")', // Endpoint URL
+            type: 'POST',
+            //data: { count: count }, // Data to be sent to the server
+            success: function (response) {
+                RemoveAndUpdateCartItemCount(0);
+                //alert(3);
+            },
+            error: function (xhr, status, error) {
+                console.error('Error updating item count');
+            }
+        });
+        
+       
+        // document.getElementById("demo").innerHTML = "Hello World";
+        //window.location.href = '@Url.Content("~/Order/Index")';
+    }
+
+    function RemoveAndUpdateCartItemCount(count) {
+        $.ajax({
+            url: '@Url.Action("RemoveAndUpdateCartItemCount", "ShoppingCart")', // Endpoint URL
+            type: 'POST',
+            data: { count: count }, // Data to be sent to the server
+            success: function (response) {
+                //alert("UpdateItemCount");
+                getCartItemCount();
+                
+                
+            },
+            error: function (xhr, status, error) {
+                console.error('Error updating item count');
+            }
+        });
+    }
+    function getCartItemCount() {
+        $.ajax({
+            url: '@Url.Action("GetCartItemCount", "ShoppingCart")', // Endpoint URL
+            type: 'POST',
+            //data: { itemCount: count }, // Data to be sent to the server
+            success: function (response) {
+                // alert("GetCartItemCount");
+                const jsonString = JSON.stringify(Object.assign({}, response))
+                const json_obj = JSON.parse(jsonString);
+                var element = document.getElementById("cart-item-count");
+                //alert(json_obj['itemCount']);
+                element.textContent = json_obj['itemCount'];
+               // alert(1);
+                window.location.href = '@Url.Content("~/Home/Index")';
+                
+            },
+            error: function (xhr, status, error) {
+                console.error('Error updating item count');
+            }
+        });
+
+        //alert(extCount);
+    }
+    // Date object
+    // Date object
+    const date = new Date();
+
+    // Add 14 days to the current date
+    date.setDate(date.getDate() + 14);
+
+    let currentDay = String(date.getDate()).padStart(2, '0');
+    let currentMonth = String(date.getMonth() + 1).padStart(2, "0");
+    let currentYear = date.getFullYear();
+
+    // we will display the date as DD-MM-YYYY
+
+    let currentDate = `${currentDay}-${currentMonth}-${currentYear}`;
+    document.getElementById("dtmDate").innerText = "Estimated Delivery: " + currentDate;
+    updateSubTotal(); // Initial call
+
+    function updateSubTotal() {//parseFloat(row.cells[5].innerHTML).substr(0, row.cells[5].length)
+        var table = document.getElementById("idShoppingCart");
+        let subTotal = Array.from(table.rows).slice(1).reduce((total, row) => {
+            //alert(parseFloat(row.cells[5].innerHTML).substr(0, row.cells[5].length));
+            //let suVal = parseFloat(row.cells[5].innerHTML);
+            //let subVal2 = suVal.substr(0, 3);
+            //alert(subVal2);
+            return total + parseFloat(row.cells[6].innerHTML);
+        }, 0);
+        document.getElementById("idSubtotal").innerHTML = "SubTotal : $" + subTotal.toFixed(2);
+        document.getElementById("idTotal").innerHTML = "Total : $" + subTotal.toFixed(2);
+    }
+</script>
 

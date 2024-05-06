@@ -17,7 +17,7 @@
            
                 <div class="card">
                     <div class="card-body">
-                        <table class="table" style="border:solid 1; border-block-color:green">
+                        <table id="idShoppingCart" class="table" style="border:solid 1; border-block-color:green">
                             <thead>
                                 <tr>
                                 <th scope="col" style="color:green">Movie</th>
@@ -34,22 +34,24 @@
                             @foreach (var item in Model)
                             {
                                     <tr>
-                                        <td><img src="@item.MovieImg" alt="Product Image" class="product-img"></td>
+                                        <td><img src="~/img/@item.MovieImg" alt="Product Image" class="product-img"></td>
                                         <td>@item.Title</td>
                                         <td>@item.Director</td>
-                                        <td>$@item.Price</td>
+                                        <td>@item.Price</td>
                                         <td style="width:15px">
-                                            <input type="number" class="form-control" value="1" min="1" >
+                                        <input type="number" id="qty-number" onchange="fnInputchange(this)" class="form-control" value="@item.Qty" min="1">
                                         </td>
-                                        <td>$10.99</td>
+                                    <td>$@(item.Price * item.Qty)</td>
+                                    <td style="display:none;visibility: hidden">@(item.Price * item.Qty)</td>
                                         <td>
-                                            <button class="btn btn-danger">
+                                        <button class="btn btn-danger" onClick="onClickRemove(this)">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
                                                     <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z" />
                                                     <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z" />
                                                 </svg>
                                             </button>
                                         </td>
+                                    <td style="display:none;visibility: hidden">@item.Id</td>
                                     </tr>
                                 }
                                 <!-- product end -->
@@ -63,9 +65,9 @@
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title font-color">Cart Summary</h5>
-                    <p class="card-text font-color">Subtotal: $10.99</p>
+                    <p class="card-text font-color" id="idSubtotal"></p>
                     <p class="card-text font-color">Shipping: Free</p>
-                    <p class="card-text font-color">Total: $10.99</p>
+                    <p class="card-text font-color" id="idTotal"></p>
                     <label for="exampleInputEmail1" style="color:green">Enter your email address:</label>
                     <input type="email" class="form-control" id="idCustomerEmail" placeholder="Enter email" >
                     <a class="btn btn-success btn-block" onclick="fnCheckout()" style="margin: 10px 10px;">Checkout</a>
@@ -75,6 +77,85 @@
     </div>
 </div>
 <script>
+   //@@ Shopping Cart
+   // //getValueFromInput();
+
+    function fnInputchange(input) {
+
+        var table = document.getElementById("idShoppingCart");
+
+        let row = input.parentElement.parentElement;
+        let id = parseInt(row.cells[8].innerHTML);
+        
+        var qtyIp = row.querySelector('.form-control');
+        var qty = qtyIp.value;
+
+        UpdateCartItemInSession(id, qty, false);
+
+        let orderLineCount = Array.from(table.rows).slice(1).reduce((total, row) => {
+
+            var qtyInput = row.querySelector('.form-control');
+
+            var quantity = qtyInput.value;
+            return total + parseInt(quantity);
+        }, 0);
+
+        RemoveAndUpdateCartItemCount(orderLineCount); //alert(orderLineCount);
+        
+    }
+
+    function getValueFromInput() {
+        // Get the input element
+        var inputElement = document.getElementsById('qty-number');
+
+        var value = inputElement.value;
+       // alert(value);
+    }
+
+    updateSubTotal(); // Initial call
+
+    function calculateSum()
+    {
+        var table = document.getElementById("idShoppingCart");
+        let rowSum = Array.from(table.rows).slice(1).reduce((total, row) => {
+                var qtyInput = row.querySelector('.form-control');
+                var quantity = qtyInput.value;
+            //alert(parseFloat(row.cells[3].innerHTML));
+                row.cells[5].innerHTML = "$" + parseFloat(quantity) * parseFloat(row.cells[3].innerHTML);
+                row.cells[6].innerHTML = parseFloat(quantity) * parseFloat(row.cells[3].innerHTML);
+                
+                return 0;
+        }, 0);
+        updateSubTotal();
+    }
+
+    function updateSubTotal() {//parseFloat(row.cells[5].innerHTML).substr(0, row.cells[5].length)
+        var table = document.getElementById("idShoppingCart");
+        let subTotal = Array.from(table.rows).slice(1).reduce((total, row) => {
+            return total + parseFloat(row.cells[6].innerHTML);
+        }, 0);
+        document.getElementById("idSubtotal").innerHTML = "SubTotal : $" + subTotal.toFixed(2);
+        document.getElementById("idTotal").innerHTML = "Total : $" + subTotal.toFixed(2);
+
+       
+    }
+
+    function onClickRemove(deleteButton) {
+        let row = deleteButton.parentElement.parentElement;
+        let id = parseInt(row.cells[8].innerHTML);
+       
+        UpdateCartItemInSession(id, 0, true);
+
+         var qtyInput = row.querySelector('.form-control');
+
+         var quantity = qtyInput.value;
+
+         RemoveCartItemCount(quantity);
+
+        row.parentNode.removeChild(row);
+        updateSubTotal(); // Call after delete
+    }
+
     // asp - area="" asp - controller="Customer" asp - action="Create"
     function fnCheckout() {
         let emailAddress = document.getElementById("idCustomerEmail").value;
@@ -90,5 +171,87 @@
         d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
         let expires = "expires=" + d.toUTCString();
         document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+    }
+
+    function UpdateCartItemInSession(id, qtyCount, isDelete) {
+       // alert(id + "/" + qtyCount + "/" + isDelete)
+        $.ajax({
+            url: '@Url.Action("UpdateShopingCartRows", "ShoppingCart")', // Endpoint URL
+            type: 'POST',
+            data: { id: id, qtyCount: qtyCount, isDelete: isDelete }, // Data to be sent to the server
+            success: function (response) {
+                
+            },
+            error: function (xhr, status, error) {
+                console.error('Error updating item count');
+            }
+        });
+    }
+
+    function getCartItemCount() {
+        $.ajax({
+            url: '@Url.Action("GetCartItemCount", "ShoppingCart")', // Endpoint URL
+            type: 'POST',
+            //data: { itemCount: count }, // Data to be sent to the server
+            success: function (response) {
+                // alert("GetCartItemCount");
+                const jsonString = JSON.stringify(Object.assign({}, response))
+                const json_obj = JSON.parse(jsonString);
+                var element = document.getElementById("cart-item-count");
+                //alert(json_obj['itemCount']);
+                element.textContent = json_obj['itemCount'];
+                updateSubTotal();
+            },
+            error: function (xhr, status, error) {
+                console.error('Error updating item count');
+            }
+        });
+
+        //alert(extCount);
+    }
+
+    function UpdateCartItemCount() {
+        $.ajax({
+            url: '@Url.Action("UpdateItemCount", "ShoppingCart")', // Endpoint URL
+            type: 'POST',
+            data: { itemCount: qtyCount }, // Data to be sent to the server
+            success: function (response) {
+                //alert("UpdateItemCount");
+                getCartItemCount();
+            },
+            error: function (xhr, status, error) {
+                console.error('Error updating item count');
+            }
+        });
+    }
+
+    function RemoveCartItemCount(count) {
+        $.ajax({
+            url: '@Url.Action("RemoveCartItemCount", "ShoppingCart")', // Endpoint URL
+            type: 'POST',
+            data: { count: count }, // Data to be sent to the server
+            success: function (response) {
+                //alert("UpdateItemCount");
+                getCartItemCount();
+            },
+            error: function (xhr, status, error) {
+                console.error('Error updating item count');
+            }
+        });
+    }
+    function RemoveAndUpdateCartItemCount(count) {
+        $.ajax({
+            url: '@Url.Action("RemoveAndUpdateCartItemCount", "ShoppingCart")', // Endpoint URL
+            type: 'POST',
+            data: { count: count }, // Data to be sent to the server
+            success: function (response) {
+                //alert("UpdateItemCount");
+                getCartItemCount();
+                calculateSum();
+            },
+            error: function (xhr, status, error) {
+                console.error('Error updating item count');
+            }
+        });
     }
 </script>

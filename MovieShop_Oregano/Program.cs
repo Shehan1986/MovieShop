@@ -20,15 +20,24 @@ namespace MovieShop_Oregano
                 options =>
              options.UseSqlServer(connectionString)
                 );
-            builder.Services.AddSession();
+
+            builder.Services.AddDistributedMemoryCache();
+            builder.Services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromSeconds(10000000);
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+            });
             builder.Services.AddHttpContextAccessor();
 
 
             builder.Services.AddScoped<ICustomerService, CustomerService>();
            
-			      builder.Services.AddScoped<IMovieService, MovieService>();
+			builder.Services.AddScoped<IMovieService, MovieService>();
 
-			      var app = builder.Build();
+            builder.Services.AddScoped<IOrderService, OrderService>();
+
+            var app = builder.Build();
 
 
            
@@ -39,7 +48,6 @@ namespace MovieShop_Oregano
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using MovieShop_Oregano.Data;
 using MovieShop_Oregano.Models;
 using MovieShop_Oregano.Models.ViewModel;
@@ -35,6 +36,8 @@ namespace MovieShop_Oregano.Controllers
             {
                 if(extCustomer != null)
                 {
+                    HttpContext.Session.SetString("Customer_Address", extCustomer.DeliveryAdress + ", " + extCustomer.DeliveryCity + ", " + extCustomer.DeliveryZip);
+
                     //customer.Id = extCustomer.Id;
                     //_customerService.UpdateCustomer(customer);
                     return RedirectToAction("OrderConfirmation", "Order");
@@ -42,7 +45,13 @@ namespace MovieShop_Oregano.Controllers
                 }
                 else
                 {
+                    HttpContext.Session.SetString("Customer_Address", customer.DeliveryAdress + ", " + customer.DeliveryCity + ", " + customer.DeliveryZip);
+
                     _customerService.AddCustomer(customer);
+
+                    var customerNew = _customerService.GetCustomerByEmail(customer.Email);
+                    HttpContext.Session.SetInt32("Customer_ID", customerNew.Id);
+
                     return RedirectToAction("OrderConfirmation", "Order");
                 }
             }
@@ -59,6 +68,7 @@ namespace MovieShop_Oregano.Controllers
         {
             if (ModelState.IsValid)
             {
+                
                 _context.Update(customer);
                 _context.SaveChanges();
 
@@ -92,13 +102,37 @@ namespace MovieShop_Oregano.Controllers
             try
             {
                 var customer = _customerService.GetCustomerByEmail(email);
+
                 if (customer != null)
                 {
+                    HttpContext.Session.SetInt32("Customer_ID", customer.Id);
                     return Json(customer); 
                 }
                 else
                 {
                     return Json(null); 
+                }
+            }
+            catch (Exception ex)
+            {
+                return Json(null);
+            }
+        }
+
+        public ActionResult CustomerOrders(string email)
+        {
+            try
+            {
+                var customer = _customerService.GetCustomerByEmail(email);
+
+                if (customer != null)
+                {
+                    HttpContext.Session.SetInt32("Customer_ID", customer.Id);
+                    return Json(customer);
+                }
+                else
+                {
+                    return Json(null);
                 }
             }
             catch (Exception ex)

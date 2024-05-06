@@ -10,45 +10,6 @@ namespace MovieShop_Oregano.Controllers
     {
 		private readonly IMovieService _movieService;
 
-        List<Movie> MovieL = new List<Movie>()
-        {
-            new Movie(1,"Title", "Director", 2001,100,"https://via.placeholder.com/100"),
-            new Movie(2,"Title", "Director", 2001,100,"https://via.placeholder.com/100"),
-            new Movie(3,"Title", "Director", 2001,100,"https://via.placeholder.com/100"),
-            new Movie(4,"Title", "Director", 2001,100,"https://via.placeholder.com/100"),
-            new Movie(5,"Abc", "Shehan", 2001,100,"https://via.placeholder.com/100"),
-            new Movie(6,"Title", "Director", 2001,100,"https://via.placeholder.com/100"),
-            new Movie(1,"Title", "Director", 2001,100,"https://via.placeholder.com/100"),
-            new Movie(2,"Title", "Director", 2001,100,"https://via.placeholder.com/100"),
-            new Movie(3,"Title", "Director", 2001,100,"https://via.placeholder.com/100"),
-            new Movie(4,"Title", "Director", 2001,100,"https://via.placeholder.com/100"),
-            new Movie(5,"Abc", "Shehan", 2001,100,"https://via.placeholder.com/100"),
-            new Movie(6,"Title", "Director", 2001,100,"https://via.placeholder.com/100"),
-            new Movie(1,"Title", "Director", 2001,100,"https://via.placeholder.com/100"),
-            new Movie(2,"Title", "Director", 2001,100,"https://via.placeholder.com/100"),
-            new Movie(3,"Title", "Director", 2001,100,"https://via.placeholder.com/100"),
-            new Movie(4,"Title", "Director", 2001,100,"https://via.placeholder.com/100"),
-            new Movie(5,"Abc", "Shehan", 2001,100,"https://via.placeholder.com/100"),
-            new Movie(6,"Title", "Director", 2001,100,"https://via.placeholder.com/100"),
-            new Movie(1,"Title", "Director", 2001,100,"https://via.placeholder.com/100"),
-            new Movie(2,"Title", "Director", 2001,100,"https://via.placeholder.com/100"),
-            new Movie(3,"Title", "Director", 2001,100,"https://via.placeholder.com/100"),
-            new Movie(4,"Title", "Director", 2001,100,"https://via.placeholder.com/100"),
-            new Movie(5,"Abc", "Shehan", 2001,100,"https://via.placeholder.com/100"),
-            new Movie(6,"Title", "Director", 2001,100,"https://via.placeholder.com/100"),
-            new Movie(1,"Title", "Director", 2001,100,"https://via.placeholder.com/100"),
-            new Movie(2,"Title", "Director", 2001,100,"https://via.placeholder.com/100"),
-            new Movie(3,"Title", "Director", 2001,100,"https://via.placeholder.com/100"),
-            new Movie(4,"Title", "Director", 2001,100,"https://via.placeholder.com/100"),
-            new Movie(5,"Abc", "Shehan", 2001,100,"https://via.placeholder.com/100"),
-            new Movie(6,"Title", "Director", 2001,100,"https://via.placeholder.com/100"),
-            new Movie(1,"Title", "Director", 2001,100,"https://via.placeholder.com/100"),
-            new Movie(2,"Title", "Director", 2001,100,"https://via.placeholder.com/100"),
-            new Movie(3,"Title", "Director", 2001,100,"https://via.placeholder.com/100"),
-            new Movie(4,"Title", "Director", 2001,100,"https://via.placeholder.com/100"),
-            new Movie(5,"Abc", "Shehan", 2001,100,"https://via.placeholder.com/100"),
-            new Movie(6,"Title", "Director", 2001,100,"https://via.placeholder.com/100")
-        };
         public MovieController(IMovieService movieService)
 		{
 			_movieService = movieService;
@@ -95,6 +56,7 @@ namespace MovieShop_Oregano.Controllers
 
         public IActionResult List()
         {
+           // HttpContext.Session.Clear();
             MovieVM model = new MovieVM();
             model.MovieList = _movieService.GetMovies();
             return View(model);
