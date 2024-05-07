@@ -1,0 +1,65 @@
+﻿@model MovieShop_Oregano.Models.ViewModel.CustomerVM;
+@{
+    ViewData["Title"] = "CustomerOrders";
+}
+
+@* @foreach (var row in Model.CustomerOrderHeaderList)
+{
+    @row.OrderDate
+    @row.CustomerName
+    @row.CustomerAddress
+    @foreach (var resDetails in row.CustomerOrderDetailsList)
+    {
+        @resDetails.MovieTitle
+        @resDetails.Price
+        @resDetails.OrderQTY
+        @resDetails.TotalPrice
+
+    }
+} *@
+
+<div class="container">
+    <div>
+        @foreach (var row in Model.CustomerOrderHeaderList)
+        {
+            <div class="card mb-3" id="idcard">
+                <div class="card-header" id="heading@row.OrderId">
+                    <h2 class="mb-0">
+                        Order Date: @row.OrderDate.ToShortDateString() - Customer: @row.CustomerName
+                    </h2>
+                </div>
+
+                <div id="collapse@row.OrderId" class="" aria-labelledby="heading@row.OrderId" data-parent="#accordion">
+                    <div class="card-body">
+                        <p class="card-text"><b>Email:</b> @row.Email <b>Mobile:</b> @row.Phone <B>Address:</B> @row.CustomerAddress</p>
+                       <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Movie</th>
+                                    <th>Title</th>
+                                    <th>Price</th>
+                                    <th>Quantity</th>
+                                    <th>Total Price</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var resDetails in row.CustomerOrderDetailsList)
+                                {
+                                    <tr>
+                                        <td><img src="~/img/@resDetails.MovieImage" alt="Product Image" class="product-img" width="10%"></td>
+                                        <td>@resDetails.MovieTitle</td>
+                                        <td>@resDetails.Price.ToString("C")</td>
+                                        <td>@resDetails.OrderQTY</td>
+                                        <td>@resDetails.TotalPrice.ToString("C")</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+

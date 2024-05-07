@@ -86,9 +86,28 @@ namespace MovieShop_Oregano.Controllers
             }
 
             HttpContext.Session.Clear();
+            ViewData["Title"] = "";
+            //HttpContext.Session.Remove("CartData");
+            //HttpContext.Session.Remove("Customer_ID");
+            //HttpContext.Session.Remove("Customer_Address");
 
-            return RedirectToAction("Index","Home");
-            //return Json(new { success = true });
+            // return RedirectToAction("Index", "Home");
+            return Json(new { success = true });
+            //return View();
+        }
+
+        public ActionResult CustomerOrders()
+        {
+            string email = "N/A";
+            CustomerVM cmOBJ = new CustomerVM();
+            List<CustomerOrderHeader> CustomerVMOBJ = new List<CustomerOrderHeader>();
+            if (email == "N/A")
+                CustomerVMOBJ = _orderService.GetCustomerOrders();
+            else
+                CustomerVMOBJ = _orderService.GetCustomerOrders();
+
+            cmOBJ.CustomerOrderHeaderList = CustomerVMOBJ;
+            return View(cmOBJ);
         }
     }
 }

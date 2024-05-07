@@ -11,10 +11,11 @@ namespace MovieShop_Oregano.Controllers
     public class MovieController : Controller
     {
 		private readonly IMovieService _movieService;
-
-        public MovieController(IMovieService movieService)
+        private readonly MovieDbContext _context;
+        public MovieController(IMovieService movieService, MovieDbContext context)
 		{
 			_movieService = movieService;
+			_context = context;
 		}
       
         public IActionResult Index(int pg=1)
@@ -105,12 +106,25 @@ namespace MovieShop_Oregano.Controllers
 			 var movie = _movieService.GetMovieById(id);
 			return View(movie);
 		}
-        public IActionResult List()
+        public IActionResult List(int? number, string? txt)
         {
            // HttpContext.Session.Clear();
             MovieVM model = new MovieVM();
-            model.MovieList = _movieService.GetMovies();
+			if(txt == null)
+				model.MovieList = _movieService.GetMovies();
+			else
+			{
+                model.MovieList = _context.Movies.Where(x => x.Title  == txt).ToList();
+            }
             return View(model);
+        }
+
+        public IActionResult SearchList(int number, string txt) {//not use
+            // HttpContext.Session.Clear();
+            MovieVM model = new MovieVM();
+			model.MovieList = _context.Movies.OrderByDescending(x => x.Title == txt).ToList();
+			return RedirectToAction("List", "");
+			return View(model);
         }
     }
 }
