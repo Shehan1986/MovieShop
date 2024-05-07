@@ -5,10 +5,10 @@
 }
 
 
- <div class="container py-3 min-vh-100 d-flex flex-column justify-content-center align-items-center">
+ <div class="container py-3 min-vh-100 d-flex flex-column justify-content-center align-items-center  ">
     <div class="col-md-12 card shadow rounded-3 my-auto">
-        <div class="card-header p-3 bg-success text-uppercase text-white text-center">
-            <h2 class="mb-0 fw-bold">Create Customer</h2>
+        <div class="card-header p-3 text-uppercase text-white text-center bg-dark-green">
+            <h2 class="mb-0 fw-bold ">Create Customer</h2>
         </div>
     </div>
     <div class="card-body col-md-12">
@@ -107,6 +107,8 @@
         dataType: "json",
         success: function (result) {
             if (result != null) {
+                sessionStorage.setItem('key', 'value');
+                
                 //console.log(JSON.stringify(result));
                 
                 //var result = JSON.parse(JSON.stringify(result))

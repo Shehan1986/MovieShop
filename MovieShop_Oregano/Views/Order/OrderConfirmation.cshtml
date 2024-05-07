@@ -2,7 +2,8 @@
 @{
     ViewData["Title"] = "OrderConfirmation";
 }
-    <div class="container mt-5">
+    
+    <div class="container-fulid mt-5">
         <div class="card">
             <div class="card-body">
                 <h2 class="card-title text-success mb-4">Order Confirmation</h2>
@@ -27,7 +28,7 @@
                                         @foreach (var item in Model)
                                         {
                                             <tr>
-                                            <td><img src="~/img/@item.MovieImg" alt="Product Image" class="product-img" style="width:40%"></td>
+                                            <td><img src="~/img/@item.MovieImg" alt="Product Image" class="product-img" style="width:30%"></td>
                                                 <td>@item.Title</td>
                                                 <td>@item.Director</td>
                                                 <td>$@item.Price</td>
@@ -81,6 +82,7 @@
     </div>
 </div>
 <script>
+    redirect();
     // var elements = document.getElementsByClassName("close-btn");
 
     // // Loop through each element with class "close-btn"
@@ -88,17 +90,33 @@
     //     elements[i].addEventListener("click", fnSessionClear);
     // }
     //@@index.html
+
+    function redirect() {
+        var value = sessionStorage.getItem('key');
+        console.log(value);
+        if (value != "value") {
+            var parameterValue = value;
+           // window.location.href = '@Url.Content("~/Movie/List")' + '?paramName=' + encodeURIComponent(parameterValue);
+
+            window.location.href = '@Url.Content("~/Movie/List")';
+        }
+    }
     function fnSessionClear() {
-      
+        sessionStorage.setItem('key', sessionStorage.getItem('Customer_ID'));
+        //location.href = '@Url.Content("~/Home/Index/")';
+        window.location.href = '@Url.Content("~/Order/CustomerOrders")';
         $.ajax({
             url: '@Url.Action("SessionClear", "Order")', // Endpoint URL
             type: 'POST',
             //data: { count: count }, // Data to be sent to the server
             success: function (response) {
+               // alert(response);
+               
                 RemoveAndUpdateCartItemCount(0);
-                //alert(3);
+                window.location.href = '@Url.Content("~/Order/CustomerOrders")';
             },
             error: function (xhr, status, error) {
+              //  alert(4);
                 console.error('Error updating item count');
             }
         });
@@ -137,7 +155,7 @@
                 //alert(json_obj['itemCount']);
                 element.textContent = json_obj['itemCount'];
                // alert(1);
-                window.location.href = '@Url.Content("~/Home/Index")';
+                window.location.href = '@Url.Content("~/Order/CustomerOrders")';
                 
             },
             error: function (xhr, status, error) {
@@ -152,7 +170,7 @@
     const date = new Date();
 
     // Add 14 days to the current date
-    date.setDate(date.getDate() + 14);
+    date.setDate(date.getDate() + 2);
 
     let currentDay = String(date.getDate()).padStart(2, '0');
     let currentMonth = String(date.getMonth() + 1).padStart(2, "0");

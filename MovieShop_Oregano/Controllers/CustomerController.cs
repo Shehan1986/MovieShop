@@ -119,27 +119,7 @@ namespace MovieShop_Oregano.Controllers
             }
         }
 
-        public ActionResult CustomerOrders(string email)
-        {
-            try
-            {
-                var customer = _customerService.GetCustomerByEmail(email);
-
-                if (customer != null)
-                {
-                    HttpContext.Session.SetInt32("Customer_ID", customer.Id);
-                    return Json(customer);
-                }
-                else
-                {
-                    return Json(null);
-                }
-            }
-            catch (Exception ex)
-            {
-                return Json(null);
-            }
-        }
+        
 
     }
 }

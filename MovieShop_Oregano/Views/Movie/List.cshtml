@@ -2,11 +2,35 @@
 @{
     ViewData["Title"] = "List";
 }
-<div class="container">
-    <div class="row">
-        <div class="col-md-12">
+<div class="container-fluid">
+
+    @* <input type="text" id="searchInput" placeholder="Search...">
+    <input type="button" id="btnSearch" value="Search" onclick="fnSearch()" /> *@
+
+    <div class="row row-cols-2 row-cols-md-3 row-cols-sm-2 row-cols-lg-4 row-cols-xl-6 row-equal-height">
+        
             @Html.Partial("_MovieListPartial", Model.MovieList)
-        </div>
+       
     </div>
 </div>
+<script>
+    function fnSearch() {
+        //alert(id);
+        let searchInput = document.getElementById("searchInput").value;
+        $.ajax({
+            url: '@Url.Action("List", "Movie")', // Endpoint URL
+            type: 'POST',
+            data: { number: 1, txt: searchInput }, // Data to be sent to the server
+            success: function (response) {
+                //$('#idGoToShopping').show();
+                
+            },
+            error: function (xhr, status, error) {
+                console.error('Error updating item count');
+            }
+        });
+    }
+
+    
+</script>
 
