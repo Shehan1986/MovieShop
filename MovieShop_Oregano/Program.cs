@@ -14,7 +14,7 @@ namespace MovieShop_Oregano
             builder.Services.AddControllersWithViews();
 
             var connectionString = builder.Configuration.GetConnectionString(
-           "DefaultConnection") ?? throw new InvalidCastException("Default Connection not found");
+           "LexiconConnection") ?? throw new InvalidCastException("Default Connection not found");
 
             builder.Services.AddDbContext<MovieDbContext>(
                 options =>

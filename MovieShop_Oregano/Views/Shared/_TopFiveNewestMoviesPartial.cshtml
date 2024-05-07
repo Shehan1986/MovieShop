@@ -1,117 +1,122 @@
-﻿
+﻿@model MovieShop_Oregano.Models.ViewModel.FrontDashboardVM
 
 
 <h1 class="text-white bg-dark-green p-4 mt-4 mb-4">Top Five Newest Movies</h1>
 <div class="row row-cols-5">
-	<div class="col">
-		<div class="card border-0 rounded-0 shadow">
-			<img src="~/img/Interstellar.jpg" class="card-img-top" alt="Movie 1" />
-			<div class="card-body my-3">
-				<div class="row d-inline-flex">
-					<div class="col-12">
-						<h4 class="card-title">Movie 1</h4>
-						<p class="card-text">Directed by: Director</p>
-						<p class="card-text">Release Year: 2020</p>
+	@foreach (var item in Model.NewestMovies)
+	{
+		<div class="col">
+			<div class="card border-0 rounded-0 shadow">
+				<img src="~/img/@item.MovieImg" class="card-img-top" alt="Movie 1" />
+				<div class="card-body my-3">
+					<div class="row d-inline-flex">
+						<div class="col-12">
+							<h4 class="card-title">@item.Title</h4>
+							<p class="card-text">Directed by: @item.Director</p>
+							<p class="card-text">Release Year: @item.ReleaseYear</p>
+						</div>
+					</div>
+				</div>
+				<div class="row align-items-center text-center g-0">
+					<div class="col-4">
+						<h5 class="">$@item.Price</h5>
+					</div>
+					<div class="col-8">
+                        <button class="btn btn-success" onclick="fnAddToSession_New(@item.Id)" style="margin-bottom:10px;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="80" height="16" fill="currentColor" class="bi bi-cart-plus" viewBox="0 0 16 16">
+                                <path d="M9 5.5a.5.5 0 0 0-1 0V7H6.5a.5.5 0 0 0 0 1H8v1.5a.5.5 0 0 0 1 0V8h1.5a.5.5 0 0 0 0-1H9z" />
+                                <path d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1zm3.915 10L3.102 4h10.796l-1.313 7zM6 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0m7 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0" />
+                            </svg>
+                        </button>
 					</div>
 				</div>
 			</div>
-			<div class="row align-items-center text-center g-0">
-				<div class="col-4">
-					<h5 class="">$49.99</h5>
-				</div>
-				<div class="col-8">
-					<a href="" class="btn btn-primary p-3 w-100 rounded-0">Add to Cart</a>
-				</div>
-			</div>
 		</div>
-	</div>
-
-	<div class="col">
-		<div class="card border-0 rounded-0 shadow">
-			<img src="~/img/Interstellar.jpg" class="card-img-top" alt="Movie 1" />
-			<div class="card-body my-3">
-				<div class="row">
-					<div class="col-12">
-						<h4 class="card-title">Movie 1</h4>
-						<p class="card-text">Directed by: Director</p>
-						<p class="card-text">Release Year: 2020</p>
-					</div>
-				</div>
-			</div>
-			<div class="row align-items-center text-center g-0">
-				<div class="col-4">
-					<h5 class="">$49.99</h5>
-				</div>
-				<div class="col-8">
-					<a href="" class="btn btn-primary p-3 w-100 rounded-0">Add to Cart</a>
-				</div>
-			</div>
-		</div>
-	</div>
-	<div class="col">
-		<div class="card border-0 rounded-0 shadow">
-			<img src="~/img/Interstellar.jpg" class="card-img-top" alt="Movie 1" />
-			<div class="card-body my-3">
-				<div class="row">
-					<div class="col-12">
-						<h4 class="card-title">Movie 1</h4>
-						<p class="card-text">Directed by: Director</p>
-						<p class="card-text">Release Year: 2020</p>
-					</div>
-				</div>
-			</div>
-			<div class="row align-items-center text-center g-0">
-				<div class="col-4">
-					<h5 class="">$49.99</h5>
-				</div>
-				<div class="col-8">
-					<a href="" class="btn btn-primary p-3 w-100 rounded-0">Add to Cart</a>
-				</div>
-			</div>
-		</div>
-	</div>
-	<div class="col">
-		<div class="card border-0 rounded-0 shadow">
-			<img src="~/img/Interstellar.jpg" class="card-img-top" alt="Movie 1" />
-			<div class="card-body my-3">
-				<div class="row">
-					<div class="col-12">
-						<h4 class="card-title">Movie 1</h4>
-						<p class="card-text">Directed by: Director</p>
-						<p class="card-text">Release Year: 2020</p>
-					</div>
-				</div>
-			</div>
-			<div class="row align-items-center text-center g-0">
-				<div class="col-4">
-					<h5 class="">$49.99</h5>
-				</div>
-				<div class="col-8">
-					<a href="" class="btn btn-primary p-3 w-100 rounded-0">Add to Cart</a>
-				</div>
-			</div>
-		</div>
-	</div>
-	<div class="col">
-		<div class="card border-0 rounded-0 shadow">
-			<img src="~/img/Interstellar.jpg" class="card-img-top" alt="Movie 1" />
-			<div class="card-body my-3">
-				<div class="row">
-					<div class="col-12">
-						<h4 class="card-title">Movie 1</h4>
-						<p class="card-text">Directed by: Director</p>
-						<p class="card-text">Release Year: 2020</p>
-					</div>
-				</div>
-			</div>
-			<div class="row align-items-center text-center g-0">
-				<div class="col-4">
-					<h5 class="">$49.99</h5>
-				</div>
-				<div class="col-8">
-					<a href="" class="btn btn-primary p-3 w-100 rounded-0">Add to Cart</a>
-				</div>
-			</div>
-		</div>
-	</div>
+	}
 </div>
+
+<div class="modal" tabindex="-1" id="idGoToShopping_new">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-body">
+                <h5>successfully added to cart!</h5>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-warning" onclick="fnHideModel_New()">Continue Shopping</button>
+                <button type="button" class="btn btn-success" onclick="fnGoToShoppingCart_new()">Go to Shopping Cart</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function fnHideModel_New() {
+        $('#idGoToShopping_new').hide();
+
+    }
+    function fnGoToShoppingCart_new() {
+        window.location.href = '@Url.Content("~/ShoppingCart/Index")';
+
+    }
+    function fnGoToDetails_new() {
+        //let emailAddress = document.getElementById("idCustomerEmail").value;
+
+        //setCookie("custemail", emailAddress, 1);
+
+        window.location.href = '@Url.Content("~/Home/Index")';
+
+    }
+
+
+
+    function fnAddToSession_New(id) {
+        //alert(id);
+        let qtyCount = 1;
+        // updateCartItemCount(qtyCount);
+        $.ajax({
+            url: '@Url.Action("AddToCart", "ShoppingCart")', // Endpoint URL
+            type: 'POST',
+            data: { id: id, qtyCount: qtyCount }, // Data to be sent to the server
+            success: function (response) {
+                $('#idGoToShopping_new').show();
+                $.ajax({
+                    url: '@Url.Action("UpdateItemCount", "ShoppingCart")', // Endpoint URL
+                    type: 'POST',
+                    data: { itemCount: qtyCount }, // Data to be sent to the server
+                    success: function (response) {
+                        //alert("UpdateItemCount");
+                        getCartItemCount_new();
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Error updating item count');
+                    }
+                });
+            },
+            error: function (xhr, status, error) {
+                console.error('Error updating item count');
+            }
+        });
+    }
+
+    function getCartItemCount_new() {
+        $.ajax({
+            url: '@Url.Action("GetCartItemCount", "ShoppingCart")', // Endpoint URL
+            type: 'POST',
+            //data: { itemCount: count }, // Data to be sent to the server
+            success: function (response) {
+                // alert("GetCartItemCount");
+                const jsonString = JSON.stringify(Object.assign({}, response))
+                const json_obj = JSON.parse(jsonString);
+                var element = document.getElementById("cart-item-count");
+                //alert(json_obj['itemCount']);
+                element.textContent = json_obj['itemCount'];
+                //fnGoToShoppingCart();
+            },
+            error: function (xhr, status, error) {
+                console.error('Error updating item count');
+            }
+        });
+
+        //alert(extCount);
+    }
+
+</script>

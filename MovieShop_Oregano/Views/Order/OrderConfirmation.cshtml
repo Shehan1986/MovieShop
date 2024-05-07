@@ -103,8 +103,6 @@
     }
     function fnSessionClear() {
         sessionStorage.setItem('key', sessionStorage.getItem('Customer_ID'));
-        //location.href = '@Url.Content("~/Home/Index/")';
-        window.location.href = '@Url.Content("~/Order/CustomerOrders")';
         $.ajax({
             url: '@Url.Action("SessionClear", "Order")', // Endpoint URL
             type: 'POST',
@@ -113,7 +111,6 @@
                // alert(response);
                
                 RemoveAndUpdateCartItemCount(0);
-                window.location.href = '@Url.Content("~/Order/CustomerOrders")';
             },
             error: function (xhr, status, error) {
               //  alert(4);
@@ -155,7 +152,6 @@
                 //alert(json_obj['itemCount']);
                 element.textContent = json_obj['itemCount'];
                // alert(1);
-                window.location.href = '@Url.Content("~/Order/CustomerOrders")';
                 
             },
             error: function (xhr, status, error) {
