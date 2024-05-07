@@ -77,6 +77,35 @@ namespace MovieShop_Oregano.Services
             _db.SaveChanges();
         }
 
+		public List<Movie> SearchMovies(string searchOption, string searchInput)
+		{
+			var query = _db.Movies.AsQueryable();
+
+			switch (searchOption)
+			{
+				case "Director":
+					query = query.Where(m => m.Director.Contains(searchInput));
+					break;
+				case "Title":
+					query = query.Where(m => m.Title.Contains(searchInput));
+					break;
+				case "ReleaseYear":
+					if (int.TryParse(searchInput, out int releaseYear))
+					{
+						query = query.Where(m => m.ReleaseYear == releaseYear);
+					}
+					break;
+				default:
+					query = query.Where(m => m.Director.Contains(searchInput));
+					break;
+			}
+
+			query = query.OrderByDescending(m => m.Id);
+
+			return query.ToList();
+
+		}
+
 		public async Task<string> SaveImageFromUrl(string imageUrl, string movieTitle)
 		{
 			try

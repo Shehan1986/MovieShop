@@ -18,11 +18,11 @@ namespace MovieShop_Oregano.Controllers
 			_context = context;
 		}
       
-        public IActionResult Index(int pg=1)
+        public IActionResult Index(int pg=1, string lastSearchOption = null)
         {
 			var movie = _movieService.GetMovies();
 
-			const int pageSize = 24;
+			const int pageSize = 6;
 			if (pg < 1)
 				pg = 1;
 
@@ -32,8 +32,30 @@ namespace MovieShop_Oregano.Controllers
 			var data = movie.Skip(recSkip).Take(pager.PageSize).ToList();
 			this.ViewBag.Pager = pager;
 
+			ViewBag.LastSearchOption = lastSearchOption;
+
 			return View(data);
         }
+
+		[HttpPost]
+		public IActionResult Search(string searchOption, string searchInput)
+		{
+
+			ViewBag.LastSearchOption = searchOption;
+			ViewBag.LastSearchInput = searchInput;
+
+			if (string.IsNullOrEmpty(searchOption) || string.IsNullOrEmpty(searchInput))
+			{
+				var movies = _movieService.GetMovies();
+				return View("Index", movies);
+			}
+			else
+			{
+				var movies = _movieService.SearchMovies(searchOption, searchInput);
+				return View("Index", movies);
+			}
+		}
+
 
 		public IActionResult Create()
 		{

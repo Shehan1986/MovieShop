@@ -20,6 +20,7 @@ namespace MovieShop_Oregano.Services
         /* Movie MovieDetails(int id);*/
         Task<string> SaveImageFromUrl(string imageUrl, string movieTitle);
         void DeleteImage(string fileName);
+		List<Movie> SearchMovies(string searchOption, string searchInput);
 
 
 

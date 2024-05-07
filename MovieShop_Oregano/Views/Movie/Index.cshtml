@@ -21,6 +21,31 @@
     <a asp-action="Create" class="btn btn-success">Create New</a>
 </p>
 
+<div class="col-md-6 mb-4">
+	<form asp-action="Search" method="post" class="form-inline">
+		<input type="hidden" name="lastSearchOption" id="lastSearchOption" value="@ViewBag.LastSearchOption" />
+		<div class="form-group mb-2">
+			<label class="mr-2">Search by:</label>
+			<div class="form-check form-check-inline">
+				<input class="form-check-input" type="radio" id="directorRadio" name="searchOption" value="Director" @(ViewBag.LastSearchOption == "Director" ? "checked" : "")>
+				<label class="form-check-label" for="directorRadio">Director</label>
+			</div>
+			<div class="form-check form-check-inline">
+				<input class="form-check-input" type="radio" id="titleRadio" name="searchOption" value="Title" @(ViewBag.LastSearchOption == "Title" ? "checked" : "")>
+				<label class="form-check-label" for="titleRadio">Title</label>
+			</div>
+			<div class="form-check form-check-inline">
+				<input class="form-check-input" type="radio" id="releaseYearRadio" name="searchOption" value="ReleaseYear" @(ViewBag.LastSearchOption == "ReleaseYear" ? "checked" : "")>
+				<label class="form-check-label" for="releaseYearRadio">Release Year</label>
+			</div>
+		</div>
+		<div class="input-group">
+			<input type="text" id="searchInput" name="searchInput" class="form-control mr-2" placeholder="Search..." value="@ViewBag.LastSearchInput" />
+			<button type="submit" class="btn btn-primary">Search</button>
+		</div>
+	</form>
+</div>
+
 	<div class="row row-cols-2 row-cols-md-3 row-cols-sm-2 row-cols-lg-4 row-cols-xl-6 row-equal-height"> @* row-cols-xl-5 *@
 		@foreach (var item in Model)
 		{
@@ -39,7 +64,7 @@
 							</div>
 						</div>
 						<div class="col-md-12">
-                        <img src="~/img/@item.MovieImg" width="100%" alt="@item.Title">
+                        <img src="~/img/@item.MovieImg" class="img-height" width="100%" alt="@item.Title">
 						</div>
 						<div class="col-md-12">
 							<div class="card-body">
@@ -72,19 +97,24 @@
 <script>
 	
 	function setEqualHeight() {
-		
+
 		var rows = document.querySelectorAll('.row-equal-height');
 		rows.forEach(function (row) {
 			var headers = row.querySelectorAll('.card-header');
 			var bodies = row.querySelectorAll('.card-body');
+			var images = row.querySelectorAll('.img-height');
 
 			var maxHeightHeader = 0;
 			var maxHeightBody = 0;
+			var maxHeightImage = 0;
 			headers.forEach(function (header) {
 				maxHeightHeader = Math.max(maxHeightHeader, header.offsetHeight);
 			});
 			bodies.forEach(function (body) {
 				maxHeightBody = Math.max(maxHeightBody, body.offsetHeight);
+			});
+			images.forEach(function (img) {
+				maxHeightImage = Math.max(maxHeightImage, img.offsetHeight);
 			});
 
 			headers.forEach(function (header) {
@@ -93,9 +123,15 @@
 			bodies.forEach(function (body) {
 				body.style.height = maxHeightBody + 'px';
 			});
+			images.forEach(function (img) {
+				img.style.height = maxHeightImage + 'px';
+			});
 		});
 	}
 
 	window.addEventListener('load', setEqualHeight);
 	window.addEventListener('resize', setEqualHeight);
+
+
+
 </script>
